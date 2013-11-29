@@ -5,23 +5,23 @@
  * @action admin_init
  * @return null
  */
-function skw_bpaf_admin_init() {
+function s8d_bpaf_admin_init() {
 
 	/* Register Settings */
-	register_setting( 'skw_bpaf_options', 'skw_bpaf_options', 'skw_bpaf_settings_validate_options' );
+	register_setting( 's8d_bpaf_options', 's8d_bpaf_options', 's8d_bpaf_settings_validate_options' );
 
 	/* Settings - General Section */
 	add_settings_section (
-		'skw_bpaf_settings_general',
+		's8d_bpaf_settings_general',
 		'General Options',
-		'skw_bpaf_settings_text',
-		'skw_bpaf_settings_page'
+		's8d_bpaf_settings_text',
+		's8d_bpaf_settings_page'
 	);
 
-	add_settings_field( 'skw_bpaf_user_ids', 'User ID(s)', 'skw_bpaf_settings_user_ids_input', 'skw_bpaf_settings_page', 'skw_bpaf_settings_general' );
+	add_settings_field( 's8d_bpaf_user_ids', 'User ID(s)', 's8d_bpaf_settings_user_ids_input', 's8d_bpaf_settings_page', 's8d_bpaf_settings_general' );
 
 }
-add_action( 'admin_init', 'skw_bpaf_admin_init' );
+add_action( 'admin_init', 's8d_bpaf_admin_init' );
 
 /**
  * Setup Admin Menu Options & Settings
@@ -29,30 +29,30 @@ add_action( 'admin_init', 'skw_bpaf_admin_init' );
  * @action network_admin_menu, admin_menu
  * @return null
  */
-function skw_bpaf_admin_menu() {
+function s8d_bpaf_admin_menu() {
 
 	if ( !is_super_admin() )
 		return false;
-	add_submenu_page( 'bp-general-settings', __( 'BuddyPress Automatic Friends', 'skw-bpaf-settings'), __( 'Automatic Friends', 'skw-bpaf-settings' ), 'manage_options', 'skw-bpaf-settings', 'skw_bpaf_settings_page' );
+	add_submenu_page( 'bp-general-settings', __( 'BuddyPress Automatic Friends', 's8d-bpaf-settings'), __( 'Automatic Friends', 's8d-bpaf-settings' ), 'manage_options', 's8d-bpaf-settings', 's8d_bpaf_settings_page' );
 
 }
 /* @since v1.1 */
-add_action( is_multisite() ? 'network_admin_menu' : 'admin_menu', 'skw_bpaf_admin_menu', '11' );
+add_action( is_multisite() ? 'network_admin_menu' : 'admin_menu', 's8d_bpaf_admin_menu', '11' );
 
 /**
  * Display the friends automatically added in the admin options
- * @since v1.5 
+ * @since v1.5
  * @return null
  */
-function skw_bpaf_display_auto_friend_users() {
+function s8d_bpaf_display_auto_friend_users() {
 	echo "<h3>Selected Users</h3>";
 
-	$options = get_option( 'skw_bpaf_options' );
-	$skw_bpaf_user_ids = $options['skw_bpaf_user_ids'];
-	$friend_user_ids = explode(',', $skw_bpaf_user_ids);
+	$options = get_option( 's8d_bpaf_options' );
+	$s8d_bpaf_user_ids = $options['s8d_bpaf_user_ids'];
+	$friend_user_ids = explode(',', $s8d_bpaf_user_ids);
 
 	foreach($friend_user_ids as $friend_user_id){
-		
+
 		$friend_userdata = get_userdata( $friend_user_id );
 
 		if( $friend_userdata ){
@@ -77,17 +77,17 @@ function skw_bpaf_display_auto_friend_users() {
  * @return null
  */
 
-function skw_bpaf_settings_page() {
+function s8d_bpaf_settings_page() {
 	?>
 	<div class="wrap">
 		<?php //screen_icon(); ?>
 		<h2>BuddyPress Automatic Friends</h2>
 		<form method="post" action="<?php echo get_admin_url(); ?>/options.php">
-		<?php settings_fields('skw_bpaf_options');?>
-		<?php do_settings_sections('skw_bpaf_settings_page');?>
+		<?php settings_fields('s8d_bpaf_options');?>
+		<?php do_settings_sections('s8d_bpaf_settings_page');?>
 		<input name="Submit" type="submit" value="Save Changes" />
 		</form>
-		<?php skw_bpaf_display_auto_friend_users();?>
+		<?php s8d_bpaf_display_auto_friend_users();?>
 	</div><!--/.wrap-->
 	<?php
 }
@@ -96,21 +96,21 @@ function skw_bpaf_settings_page() {
  * Instructions
  * @return null
  */
-function skw_bpaf_settings_text() {
+function s8d_bpaf_settings_text() {
 	echo "<p>Enter the user id(s) you would like to autofriend upon new user registration.</p>";
 }
 
-/** 
- * Form Inputs 
+/**
+ * Form Inputs
  * @uses get_option
  * @return null
  */
-function skw_bpaf_settings_user_ids_input() {
-	$options = get_option( 'skw_bpaf_options' );
-	$user_ids = $options['skw_bpaf_user_ids'];
-	
+function s8d_bpaf_settings_user_ids_input() {
+	$options = get_option( 's8d_bpaf_options' );
+	$user_ids = $options['s8d_bpaf_user_ids'];
+
 	echo "<p>";
-	echo "<input class='regular-text' id='skw_bpaf_user_ids' name='skw_bpaf_options[skw_bpaf_user_ids]' type='text' value='$user_ids' />";
+	echo "<input class='regular-text' id='s8d_bpaf_user_ids' name='s8d_bpaf_options[s8d_bpaf_user_ids]' type='text' value='$user_ids' />";
 	echo "<span class='description'>* comma separated</span>";
 	echo "</p>";
 }
@@ -120,13 +120,13 @@ function skw_bpaf_settings_user_ids_input() {
  * @uses is_array
  * @return array, false
  */
-function skw_bpaf_settings_validate_options( $input ) {
+function s8d_bpaf_settings_validate_options( $input ) {
 	$valid = array();
-	$valid['skw_bpaf_user_ids'] = preg_replace(
+	$valid['s8d_bpaf_user_ids'] = preg_replace(
 		'/[^0-9,]/',
 		'',
-		$input['skw_bpaf_user_ids']
-	);	
+		$input['s8d_bpaf_user_ids']
+	);
 	return is_array( $valid ) ? $valid : false;
 }
 ?>

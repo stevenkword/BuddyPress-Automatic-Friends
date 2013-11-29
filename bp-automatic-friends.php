@@ -26,51 +26,51 @@ Author URI: http://www.stevenword.com
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/** 
+/**
  * Loader function only fires if BuddyPress exists
  * @uses is_admin, add_action
  * @action bp_loaded
  * @return null
  */
-function skw_bpaf_loader(){
+function s8d_bpaf_loader(){
 
 	/* Load the admin */
 	if ( is_admin() ){
 		require_once( dirname(__FILE__) . '/includes/admin.php' );
 	}
-	
+
 	/* A Hook into BP Core Activated User */
-	//add_action( 'bp_core_activated_user', 'skw_bpaf_create_friendships' );
-	
+	//add_action( 'bp_core_activated_user', 's8d_bpaf_create_friendships' );
+
 	/* Do this if the activated user process is bypassed */
-	//add_action( 'bp_core_signup_user', 'skw_bpaf_create_friendships' );
-	
+	//add_action( 'bp_core_signup_user', 's8d_bpaf_create_friendships' );
+
 	/* Do this the first time a new user logs in */
-	add_action( 'wp', 'skw_bpaf_first_login' );
+	add_action( 'wp', 's8d_bpaf_first_login' );
 
 }
-add_action( 'bp_loaded', 'skw_bpaf_loader' );
+add_action( 'bp_loaded', 's8d_bpaf_loader' );
 
 /**
  * New method for creating friendships at first login
  * Prevents conflict with plugins such as "Disable Activation" that bypass the activation process
  *
  * Hook into the 'wp' action and check if the user is logged in
- * and if get_user_meta( $bp->loggedin_user->id, 'last_activity' ) is false. 
+ * and if get_user_meta( $bp->loggedin_user->id, 'last_activity' ) is false.
  * http://buddypress.trac.wordpress.org/ticket/3003
  */
-function skw_bpaf_first_login(){
-	
+function s8d_bpaf_first_login(){
+
 	if( ! is_user_logged_in() )
 		return;
-	
+
 	global $bp;
-	
+
 	$last_login = get_user_meta( $bp->loggedin_user->id, 'last_activity', true );
-		
+
 	if( ! isset( $last_login ) || empty( $last_login ) )
-		skw_bpaf_create_friendships( $bp->loggedin_user->id );
-	
+		s8d_bpaf_create_friendships( $bp->loggedin_user->id );
+
 }
 
 /**
@@ -81,38 +81,38 @@ function skw_bpaf_first_login(){
  * @uses get_userdata, get_option, explode, friends_add_friend, get_friend_user_ids, total_friend_count
  * @return null
  */
-function skw_bpaf_create_friendships( $initiator_user_id ) {
-	
+function s8d_bpaf_create_friendships( $initiator_user_id ) {
+
 	global $bp;
 
 	/* Get the user data for the initiatorly registered user. */
 	$initiator_user_info = get_userdata( $initiator_user_id );
 
 	/* Get the friend users id(s) */
-	$options = get_option( 'skw_bpaf_options' );
-	$skw_bpaf_user_ids = $options[ 'skw_bpaf_user_ids' ];
+	$options = get_option( 's8d_bpaf_options' );
+	$s8d_bpaf_user_ids = $options[ 's8d_bpaf_user_ids' ];
 
 	/* Check to see if the admin options are set*/
-	if ( isset( $skw_bpaf_user_ids ) && ! empty( $skw_bpaf_user_ids ) ){
+	if ( isset( $s8d_bpaf_user_ids ) && ! empty( $s8d_bpaf_user_ids ) ){
 
-		$friend_user_ids = explode( ',', $skw_bpaf_user_ids );
+		$friend_user_ids = explode( ',', $s8d_bpaf_user_ids );
 		foreach ( $friend_user_ids as $friend_user_id ){
-			
+
 			/* Request the friendship */
 			if ( !friends_add_friend( $initiator_user_id, $friend_user_id, $force_accept = true ) ) {
 				return false;
 			}
-			else { 
+			else {
 				/* Get friends of $user_id */
-				$friend_ids = BP_Friends_Friendship::get_friend_user_ids( $initiator_user_id ); 
+				$friend_ids = BP_Friends_Friendship::get_friend_user_ids( $initiator_user_id );
 
 				/* Loop through the initiator's friends and update their friend counts */
-				foreach ( (array) $friend_ids as $friend_id ) { 
+				foreach ( (array) $friend_ids as $friend_id ) {
 					BP_Friends_Friendship::total_friend_count( $friend_id );
 				}
 
 				/* Update initiator friend counts */
-				BP_Friends_Friendship::total_friend_count( $initiator_user_id ); 
+				BP_Friends_Friendship::total_friend_count( $initiator_user_id );
 			}
 
 		}
