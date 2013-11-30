@@ -89,13 +89,13 @@ function s8d_bpaf_create_friendships( $initiator_user_id ) {
 	$initiator_user_info = get_userdata( $initiator_user_id );
 
 	/* Get the friend users id(s) */
-	$options = get_option( 's8d_bpaf_options' );
-	$s8d_bpaf_user_ids = $options[ 's8d_bpaf_user_ids' ];
+	$options = get_option( s8d_BPAF_Admin::OPTION );
+	$global_friend_user_ids = $options[ 's8d_bpaf_user_ids' ];
 
 	/* Check to see if the admin options are set*/
-	if ( isset( $s8d_bpaf_user_ids ) && ! empty( $s8d_bpaf_user_ids ) ){
+	if ( isset( $global_friend_user_ids ) && ! empty( $global_friend_user_ids ) ){
 
-		$friend_user_ids = explode( ',', $s8d_bpaf_user_ids );
+		$friend_user_ids = explode( ',', $global_friend_user_ids );
 		foreach ( $friend_user_ids as $friend_user_id ){
 
 			/* Request the friendship */
