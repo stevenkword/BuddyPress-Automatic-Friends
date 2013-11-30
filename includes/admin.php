@@ -111,9 +111,10 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 	 */
 	function s8d_bpaf_display_auto_friend_users() {
 		echo '<p>When new user accounts are registered, friendships between the new user and each of the following global friends will be created automatically.</p>';
-		echo '<h3>Global Friends</h3>';
-		echo '<input type="text" id="other" name="other" />';
-		echo '<a href="user-new.php" class="add-new-h2">Add New</a>';
+		echo '<h3 style="float: left">Global Friends';
+		echo '<input style="margin-left:20px"type="text" id="other" name="other" />';
+		echo '<button id="add-global-friend" class="button" disabled="disabled">Add New</button>';
+		echo '</h3>';
 
 		$options = get_option( s8d_BuddyPress_Automatic_Friends_Core::OPTION );
 		$s8d_bpaf_user_ids = $options['s8d_bpaf_user_ids'];
