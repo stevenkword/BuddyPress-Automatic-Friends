@@ -5,26 +5,64 @@ Plugin URI: http://www.stevenword.com/bp-automatic-friends/
 Description: Automatically create and accept friendships for specified users upon new user registration. * Requires BuddyPress
 Version: 2.0.0
 Author: Steven K. Word
-Author URI: http://www.stevenword.com
+Author URI: http://stevenword.com/
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+
+Copyright 2013 Steven K. Word
+
+GNU General Public License, Free Software Foundation <http://creativecommons.org/licenses/GPL/2.0/>
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/*
- Copyright 2009-2013  Steven K Word  (email : stevenword@gmail.com)
+class s8d_BuddyPress_Automatic_Friends_Core {
 
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
+	const VERSION    = '2.0';
+	const METAKEY    = 's8d_bpaf_global_friend';
+	const OPTION     = 's8d_bpaf_options';
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
+	/* Define and register singleton */
+	private static $instance = false;
+	public static function instance() {
+		if( ! self::$instance ) {
+			self::$instance = new s8d_BuddyPress_Automatic_Friends_Core;
+		}
+		return self::$instance;
+	}
 
- You should have received a copy of the GNU General Public License
- along with this program; if not, write to the Free Software
- Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+	/**
+	 * Gene manipulation algorithms go here
+	 */
+	private function __clone() { }
+
+	/**
+	 * Register actions and filters
+	 *
+	 * @uses add_action()
+	 * @return null
+	 */
+	public function __construct() {
+
+	}
+}
+s8d_BuddyPress_Automatic_Friends_Core::instance();
+
+
+
+
 
 /**
  * Loader function only fires if BuddyPress exists
@@ -38,12 +76,6 @@ function s8d_bpaf_loader(){
 	if ( is_admin() ){
 		require_once( dirname(__FILE__) . '/includes/admin.php' );
 	}
-
-	/* A Hook into BP Core Activated User */
-	//add_action( 'bp_core_activated_user', 's8d_bpaf_create_friendships' );
-
-	/* Do this if the activated user process is bypassed */
-	//add_action( 'bp_core_signup_user', 's8d_bpaf_create_friendships' );
 
 	/* Do this the first time a new user logs in */
 	add_action( 'wp', 's8d_bpaf_first_login' );
@@ -68,9 +100,27 @@ function s8d_bpaf_first_login(){
 
 	$last_login = get_user_meta( $bp->loggedin_user->id, 'last_activity', true );
 
-	if( ! isset( $last_login ) || empty( $last_login ) )
+// This needs to be re-added after debugging
+//	if( ! isset( $last_login ) || empty( $last_login ) )
 		s8d_bpaf_create_friendships( $bp->loggedin_user->id );
 
+}
+
+
+// @return array|bool
+function s8d_bpaf_get_global_friends() {
+	// The Query
+	$user_query = new WP_User_Query( array(
+		'meta_key' => s8d_BuddyPress_Automatic_Friends_Core::METAKEY,
+		'meta_value' => true,
+		'fields' => 'ID'
+	) );
+
+	if ( ! empty( $user_query->results ) ) {
+		return $user_query->results;
+	} else {
+		return false;
+	}
 }
 
 /**
@@ -89,8 +139,10 @@ function s8d_bpaf_create_friendships( $initiator_user_id ) {
 	$initiator_user_info = get_userdata( $initiator_user_id );
 
 	/* Get the friend users id(s) */
-	$options = get_option( s8d_BPAF_Admin::OPTION );
-	$global_friend_user_ids = $options[ 's8d_bpaf_user_ids' ];
+	//$options = get_option( s8d_BuddyPress_Automatic_Friends_Core::OPTION );
+	//$global_friend_user_ids = $options[ 's8d_bpaf_user_ids' ];
+
+	$global_friend_user_ids = s8d_bpaf_get_global_friends();
 
 	/* Check to see if the admin options are set*/
 	if ( isset( $global_friend_user_ids ) && ! empty( $global_friend_user_ids ) ){

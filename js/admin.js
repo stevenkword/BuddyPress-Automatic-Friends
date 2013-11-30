@@ -1,5 +1,6 @@
 jQuery( document ).ready( function( $ ) {
-	alert('load');
+	$other = $('#other');
+
 	$formField.suggest(ajaxurl + '?action=bpaf_suggest', {
 		resultsClass: 'ac_results dl_suggest_results',
 		onSelect: function() {

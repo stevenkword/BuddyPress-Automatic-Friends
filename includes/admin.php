@@ -2,7 +2,7 @@
 /**
  * @since 2.0.0
  */
-class s8d_BPAF_Admin {
+class s8d_BuddyPress_Automatic_Friends_Admin {
 
 	/* Post Type */
 	public $post_type_slug = 'slide';
@@ -10,14 +10,13 @@ class s8d_BPAF_Admin {
 	public $plugins_url;
 
 	/* Option Name */
-	const OPTION          = 's8d_bpaf_options';
-	const VERSION  = '2.0.0';
+	const SCRIPTS_VERSION    = '1';
 
 	/* Define and register singleton */
 	private static $instance = false;
 	public static function instance() {
 		if( ! self::$instance ) {
-			self::$instance = new s8d_BPAF_Admin;
+			self::$instance = new s8d_BuddyPress_Automatic_Friends_Admin;
 		}
 		return self::$instance;
 	}
@@ -40,6 +39,11 @@ class s8d_BPAF_Admin {
 		add_action( 'admin_init', array( $this, 'action_admin_init' ) );
 		//add_action( 'admin_enqueue_scripts', array( $this, 'action_admin_enqueue_scripts' ), 11 );
 		add_action( is_multisite() ? 'network_admin_menu' : 'admin_menu', array( $this, 'action_admin_menu' ), 11 );
+
+		// User options
+		add_action( 'personal_options', array( $this, 'action_personal_options' )  );
+		add_action( 'personal_options_update', array( $this, 'action_personal_options_update' ) );
+		add_action( 'edit_user_profile_update', array( $this, 'action_personal_options_update' ) );
 	}
 
 	/**
@@ -51,7 +55,7 @@ class s8d_BPAF_Admin {
 	function action_admin_init() {
 
 		/* Register Settings */
-		register_setting( self::OPTION, self::OPTION, array( $this, 's8d_bpaf_settings_validate_options' ) );
+		register_setting( s8d_BuddyPress_Automatic_Friends_Core::OPTION, s8d_BuddyPress_Automatic_Friends_Core::OPTION, array( $this, 's8d_bpaf_settings_validate_options' ) );
 
 		/* Settings - General Section */
 		add_settings_section (
@@ -78,7 +82,7 @@ class s8d_BPAF_Admin {
 	 * @return null
 	 */
 	public function action_admin_enqueue_scripts() {
-		wp_enqueue_script( 'bpaf-admin', $this->plugins_url. '/js/admin.js', '', self::VERSION, true );
+		wp_enqueue_script( 'bpaf-admin', $this->plugins_url. '/js/admin.js', '', self::SCRIPTS_VERSION, true );
 	}
 
 	/**
@@ -103,11 +107,15 @@ class s8d_BPAF_Admin {
 	 */
 	function s8d_bpaf_display_auto_friend_users() {
 		echo '<p>When new user accounts are registered, friendships between the new user and each of the following global friends will be created automatically.</p>';
-		echo '<h3>Global Friends<a href="user-new.php" class="add-new-h2">Add New</a></h3>';
+		echo '<h3>Global Friends</h3>';
+		echo '<input type="text" id="other" name="other" />';
+		echo '<a href="user-new.php" class="add-new-h2">Add New</a>';
 
-		$options = get_option( self::OPTION );
+		$options = get_option( s8d_BuddyPress_Automatic_Friends_Core::OPTION );
 		$s8d_bpaf_user_ids = $options['s8d_bpaf_user_ids'];
 		$friend_user_ids = explode(',', $s8d_bpaf_user_ids);
+
+		$friend_user_ids = $global_friend_user_ids = s8d_bpaf_get_global_friends();
 
 		echo '<table class="wp-list-table widefat fixed users" cellspacing="0">';
 		?>
@@ -163,12 +171,8 @@ class s8d_BPAF_Admin {
 			  <th scope="col" id="friends" class="manage-column column-friends sortable desc" style=""><a><span>Friends</span></a></th>
 			</tr>
 		</tfoot>
+		</table>
 		<?php
-
-?>
-</table>
-<?php
-
 	}
 
 	/**
@@ -201,7 +205,7 @@ class s8d_BPAF_Admin {
 	 * @return null
 	 */
 	function s8d_bpaf_settings_user_ids_input() {
-		$options = get_option( self::OPTION );
+		$options = get_option( s8d_BuddyPress_Automatic_Friends_Core::OPTION );
 		$user_ids = $options['s8d_bpaf_user_ids'];
 
 		echo "<p>";
@@ -210,23 +214,38 @@ class s8d_BPAF_Admin {
 		echo "</p>";
 	}
 
-	/**
-	 * Form Validation
-	 * @uses is_array
-	 * @return array, false
-	 */
-	function s8d_bpaf_settings_validate_options( $input ) {
-		$valid = array();
-		$valid['s8d_bpaf_user_ids'] = preg_replace(
-			'/[^0-9,]/',
-			'',
-			$input['s8d_bpaf_user_ids']
-		);
-		return is_array( $valid ) ? $valid : false;
+	function action_personal_options( $user ) {
+		$meta_value = get_user_meta( $user->ID, s8d_BuddyPress_Automatic_Friends_Core::METAKEY, true );
+		?>
+			</table>
+			<table class="form-table">
+			<h3>BuddyPress Automatic Friends</h3>
+			<tr>
+				<th scope="row">Global Friend</th>
+				<td>
+					<label for="global-friend">
+						<input type="checkbox" id="global-friend" name="global-friend" <?php checked( $meta_value ); ?> />
+						<span> Automatically create friendships with all new users</span>
+					</label>
+				</td>
+			</tr>
+		<?php
 	}
-} // Class
-s8d_BPAF_Admin::instance();
 
+	function action_personal_options_update( $user_id ) {
+		// @TODO: nonce check
+		//if ( !current_user_can( 'edit_user', $user_id ) )
+		//	return false;
+
+		$meta_value = isset( $_POST[ 'global-friend' ] ) ? true : false;
+
+		update_usermeta( $user_id, s8d_BuddyPress_Automatic_Friends_Core::METAKEY, $meta_value );
+	}
+
+} // Class
+s8d_BuddyPress_Automatic_Friends_Admin::instance();
+
+/*
 // Register the column
 function price_column_register( $columns ) {
     $columns['price'] = __( 'Global Friend', 'my-plugin' );
@@ -267,26 +286,4 @@ function price_column_orderby( $vars ) {
     return $vars;
 }
 add_filter( 'request', 'price_column_orderby' );
-
-
-// This will show below the color scheme and above username field
-add_action( 'personal_options', 'extra_profile_fields' );
-
-function extra_profile_fields( $user ) {
-    // get the value of a single meta key
-    $meta_value = get_user_meta( $user->ID, 'meta_key', true ); // $user contains WP_User object
-    // do something with it.
-    ?>
-    	</table>
-		<table class="form-table">
-		<h3>BuddyPress Automatic Friends</h3>
-		<tr>
-			<th scope="row">Global Friend</th>
-			<td>
-				<label for="global_friend">
-				<input type="checkbox" id="global_friend" name="global_friend"<?php checked( $meta_value ); ?> /> Automatically create friendships with all new users
-				</label>
-			</td>
-		</tr>
-    <?php
-}
+*/
