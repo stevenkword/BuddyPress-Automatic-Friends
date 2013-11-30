@@ -115,8 +115,7 @@ class s8d_BPAF_Admin {
 			<tr>
 			  <th scope="col" id="username" class="manage-column column-username sortable desc" style=""><a><span> Username</span></a></th>
 			  <th scope="col" id="name" class="manage-column column-name sortable desc" style=""><a><span>Name</span></a></th>
-			  <th scope="col" id="email" class="manage-column column-email sortable desc" style=""><a><span>E-mail</span></a></th>
-			  <th scope="col" id="role" class="manage-column column-role" style=""><a><span>Role</span></a></th>
+			  <th scope="col" id="friends" class="manage-column column-friends sortable desc" style=""><a><span>Friends</span></a></th>
 			</tr>
 		</thead>
 		<?php
@@ -145,26 +144,9 @@ class s8d_BPAF_Admin {
 				  <td class="name column-name">
 					<?php echo $friend_userdata->display_name;?>
 				  </td>
-				  <td class="email column-email">
-					<a href="mailto:<?php echo $friend_userdata->user_email;?>" title="E-mail: <?php echo $friend_userdata->user_email;?>">
-					  <?php echo $friend_userdata->user_email;?>
-					</a>
-				  </td>
-				  <td class="role column-role">
-					<?php
-						global $wpdb;
-						$capabilities = $friend_userdata->{$wpdb->prefix . 'capabilities'};
 
-						if ( !isset( $wp_roles ) )
-							$wp_roles = new WP_Roles();
-
-						foreach ( $wp_roles->role_names as $role => $name ) :
-
-							if ( array_key_exists( $role, $capabilities ) )
-								echo $role;
-
-						endforeach;
-					?>
+				  <td class="friends column-friends">
+					  <?php echo BP_Friends_Friendship::total_friend_count( $friend_user_id );?>
 				  </td>
 				</tr>
 				<?php
@@ -178,8 +160,7 @@ class s8d_BPAF_Admin {
 			<tr>
 			  <th scope="col" id="username" class="manage-column column-username sortable desc" style=""><a><span> Username</span></a></th>
 			  <th scope="col" id="name" class="manage-column column-name sortable desc" style=""><a><span>Name</span></a></th>
-			  <th scope="col" id="email" class="manage-column column-email sortable desc" style=""><a><span>E-mail</span></a></th>
-			  <th scope="col" id="role" class="manage-column column-role" style=""><a><span>Role</span></a></th>
+			  <th scope="col" id="friends" class="manage-column column-friends sortable desc" style=""><a><span>Friends</span></a></th>
 			</tr>
 		</tfoot>
 		<?php
