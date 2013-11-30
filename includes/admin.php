@@ -37,13 +37,17 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		$this->plugins_url = plugins_url( '/bp-automatic-friends' );
 
 		add_action( 'admin_init', array( $this, 'action_admin_init' ) );
-		//add_action( 'admin_enqueue_scripts', array( $this, 'action_admin_enqueue_scripts' ), 11 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'action_admin_enqueue_scripts' ), 11 );
 		add_action( is_multisite() ? 'network_admin_menu' : 'admin_menu', array( $this, 'action_admin_menu' ), 11 );
 
 		// User options
 		add_action( 'personal_options', array( $this, 'action_personal_options' )  );
 		add_action( 'personal_options_update', array( $this, 'action_personal_options_update' ) );
 		add_action( 'edit_user_profile_update', array( $this, 'action_personal_options_update' ) );
+
+		// AJAX
+		add_action( 'wp_ajax_bpaf_global_friend_suggest', array( $this, 'action_ajax_bpaf_global_friend_suggest' ) );
+		//add_action( 'wp_ajax_update_slide', array( $this, 'action_wp_ajax_update_slide' ) );
 	}
 
 	/**
@@ -82,7 +86,7 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 	 * @return null
 	 */
 	public function action_admin_enqueue_scripts() {
-		wp_enqueue_script( 'bpaf-admin', $this->plugins_url. '/js/admin.js', '', self::SCRIPTS_VERSION, true );
+		wp_enqueue_script( 'bpaf-admin', $this->plugins_url. '/js/admin.js', array( 'jquery', 'jquery-ui-autocomplete' ), self::SCRIPTS_VERSION, true );
 	}
 
 	/**
@@ -238,8 +242,34 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		//	return false;
 
 		$meta_value = isset( $_POST[ 'global-friend' ] ) ? true : false;
-
 		update_usermeta( $user_id, s8d_BuddyPress_Automatic_Friends_Core::METAKEY, $meta_value );
+
+		// Update the friend counts
+		BP_Friends_Friendship::total_friend_count( $user_id );
+	}
+
+	function action_ajax_bpaf_global_friend_suggest() {
+		// Nonce check
+		//if ( ! wp_verify_nonce( $_REQUEST[ 'nonce' ], $this->nonce_field ) ) {
+		//	wp_die( $this->nonce_fail_message );
+		//}
+
+		$global_friend_user_ids = s8d_bpaf_get_global_friends();
+
+		$users = get_users( array(
+		//	'fields' => 'user_nicename'
+			'exclude' => $global_friend_user_ids
+		 ) );
+
+
+		$user_ids = array();
+		foreach( $users as $user ) {
+			$user_ids[] = $user->data->user_login;
+		}
+
+		header('Content-Type: application/x-json');
+		echo $json = json_encode( $user_ids );
+		die;
 	}
 
 } // Class

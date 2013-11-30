@@ -147,7 +147,11 @@ function s8d_bpaf_create_friendships( $initiator_user_id ) {
 	/* Check to see if the admin options are set*/
 	if ( isset( $global_friend_user_ids ) && ! empty( $global_friend_user_ids ) ){
 
-		$friend_user_ids = explode( ',', $global_friend_user_ids );
+		// @legacy
+		//$friend_user_ids = explode( ',', $global_friend_user_ids );
+
+		$friend_user_ids = $global_friend_user_ids;
+
 		foreach ( $friend_user_ids as $friend_user_id ){
 
 			/* Request the friendship */
@@ -171,4 +175,16 @@ function s8d_bpaf_create_friendships( $initiator_user_id ) {
 
 	}
 	return;
+}
+
+/**
+ * Destroy Friendships
+ *
+ * @global bp
+ * @param initiator_user_id
+ * @uses get_userdata, get_option, explode, friends_add_friend, get_friend_user_ids, total_friend_count
+ * @return null
+ */
+function s8d_bpaf_destroy_friendships( $initiator_user_id ) {
+
 }
