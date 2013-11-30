@@ -102,8 +102,7 @@ class s8d_BPAF_Admin {
 	 * @return null
 	 */
 	function s8d_bpaf_display_auto_friend_users() {
-
-		echo '<p>These are your main peeps</p>';
+		echo '<p>When new user accounts are registered, friendships between the new user and each of the following global friends will be created automatically.</p>';
 		echo '<h3>Global Friends<a href="user-new.php" class="add-new-h2">Add New</a></h3>';
 
 		$options = get_option( self::OPTION );
@@ -304,7 +303,7 @@ function extra_profile_fields( $user ) {
 			<th scope="row">Global Friend</th>
 			<td>
 				<label for="global_friend">
-				<input type="checkbox" id="global_friend" name="global_friend"<?php checked( $meta_value ); ?> /> Enable automatic friendships with all new users
+				<input type="checkbox" id="global_friend" name="global_friend"<?php checked( $meta_value ); ?> /> Automatically create friendships with all new users
 				</label>
 			</td>
 		</tr>
