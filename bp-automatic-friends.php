@@ -6,6 +6,7 @@ Description: Automatically create and accept friendships for specified users upo
 Version: 2.0.0
 Author: Steven K. Word
 Author URI: http://stevenword.com/
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DWK9EXNAHLZ42
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
