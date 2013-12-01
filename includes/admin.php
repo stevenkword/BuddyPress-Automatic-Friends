@@ -110,11 +110,14 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 	 * @return null
 	 */
 	function s8d_bpaf_display_auto_friend_users() {
-		echo '<p>When new user accounts are registered, friendships between the new user and each of the following global friends will be created automatically.</p>';
-		echo '<h3 style="float: left">Global Friends';
-		echo '<input style="margin-left:20px"type="text" id="other" name="other" />';
-		echo '<button id="add-global-friend" class="button" disabled="disabled">Add New</button>';
-		echo '</h3>';
+		?>
+		<p>When new user accounts are registered, friendships between the new user and each of the following global friends will be created automatically.</p>
+		<h3 style="float: left">Global Friends</h3>
+		<div style="padding: 1em 0;">
+		<input type="text" name="other" id="other" style="margin-left: 1em;"value="Search by Username" onfocus="if (this.value == 'Search by Username') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search by Username';}" size="40" maxlength="128">
+		<button id="add-global-friend" class="button" disabled="disabled">Add User</button>
+		</div>
+		<?php
 
 		$options = get_option( s8d_BuddyPress_Automatic_Friends_Core::OPTION );
 		$s8d_bpaf_user_ids = $options['s8d_bpaf_user_ids'];
@@ -188,7 +191,7 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 
 	function s8d_bpaf_settings_page() {
 		?>
-		<div class="wrap">
+		<div class="wrap" style="margin-right: 320px;">
 			<?php //screen_icon(); ?>
 			<h2>BuddyPress Automatic Friends</h2>
 			<?php $this->s8d_bpaf_display_auto_friend_users();?>
