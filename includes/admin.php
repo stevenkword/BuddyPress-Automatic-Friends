@@ -33,12 +33,22 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 	 * @return null
 	 */
 	public function __construct() {
+		global $pagenow;
+
 		// Setup
 		$this->plugins_url = plugins_url( '/bp-automatic-friends' );
 
+		// Admin Menu
+		add_action( is_multisite() ? 'network_admin_menu' : 'admin_menu', array( $this, 'action_admin_menu' ), 11 );
+
+		/* We don't need any of these things in other places */
+		if( 'users.php' != $pagenow || 's8d-bpaf-settings' != $_REQUEST[ 'page' ] ) {
+			return;
+		}
+
+		// Init
 		add_action( 'admin_init', array( $this, 'action_admin_init' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'action_admin_enqueue_scripts' ), 11 );
-		add_action( is_multisite() ? 'network_admin_menu' : 'admin_menu', array( $this, 'action_admin_menu' ), 11 );
 
 		// User options
 		add_action( 'personal_options', array( $this, 'action_personal_options' )  );
@@ -87,6 +97,9 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 	 */
 	public function action_admin_enqueue_scripts() {
 		wp_enqueue_script( 'bpaf-admin', $this->plugins_url. '/js/admin.js', array( 'jquery', 'jquery-ui-autocomplete' ), self::SCRIPTS_VERSION, true );
+
+		wp_enqueue_style( 'bpaf-genericons', $this->plugins_url . '/fonts/genericons/genericons.css', '', self::SCRIPTS_VERSION );
+		wp_enqueue_style( 'bpaf-admin', $this->plugins_url . '/css/admin.css', array( 'bpaf-genericons' ), self::SCRIPTS_VERSION );
 	}
 
 	/**
@@ -215,11 +228,11 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 							<h3 class="hndle"><span>Contact BPAF</span></h3>
 							<!--<a href="https://github.com/stevenkword/BuddyPress-Automatic-Friends" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>-->
 							<div class="inside">
-								<ul class="bpaf_contacts">
-									<li><a href="http://wordpress.org/support/plugin/bp-automatic-friends" target="_blank"><span class="icon icon-wordpress"></span> BPAF Forum</a></li>
-									<li><a href="http://stevenword.com/plugins/bp-automatic-friends/" target="_blank"><span class="icon icon-plugin"></span> BPAF on the Web</a></li>
-									<li><a href="https://github.com/stevenkword/BuddyPress-Automatic-Friends" target="_blank"><span class="icon icon-wordpress"></span> BPAF on GitHub</a></li>
-									<li><a href="http://wordpress.org/support/view/plugin-reviews/bp-automatic-friends" target="_blank"><span class="icon icon-star "></span> Review BPAF on WordPress.org</a></li>
+								<ul class="bpaf-contact-links">
+									<li><a class="link-bpaf-forum" href="http://wordpress.org/support/plugin/bp-automatic-friends" target="_blank">BPAF Forum</a></li>
+									<li><a class="link-bpaf-web" href="http://stevenword.com/plugins/bp-automatic-friends/" target="_blank">BPAF on the Web</a></li>
+									<li><a class="link-bpaf-github" href="https://github.com/stevenkword/BuddyPress-Automatic-Friends" target="_blank">BPAF on GitHub</a></li>
+									<li><a class="link-bpaf-review" href="http://wordpress.org/support/view/plugin-reviews/bp-automatic-friends" target="_blank">Review BPAF on WordPress.org</a></li>
 								</ul>
 							</div>
 						</div>

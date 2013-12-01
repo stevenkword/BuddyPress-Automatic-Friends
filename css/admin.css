@@ -1,0 +1,27 @@
+/**
+ * Genericons
+ *
+ */
+.wrap h2:before {
+	content: '\f304'; /* `person` genericon glyph */
+	display: inline-block;
+	-webkit-font-smoothing: antialiased;
+	font: normal 32px/1 'Genericons';
+	vertical-align: middle;
+}
+
+.link-bpaf-forum::before,
+.link-bpaf-web::before,
+.link-bpaf-github::before,
+.link-bpaf-review::before {
+	display: inline-block;
+	-webkit-font-smoothing: antialiased;
+	font: normal 24px/1 'Genericons';
+	vertical-align: middle;
+	padding-right: 0.25em;
+}
+
+.link-bpaf-forum::before { content: '\f108'; /* `chat` genericon gylph */ }
+.link-bpaf-web::before { content: '\f409'; /* `home` genericon gylph */ }
+.link-bpaf-github::before { content: '\f200'; /* GitHub logo genericon gylph */ }
+.link-bpaf-review::before { content: '\f205'; /* WordPress genericon gylph */ }
