@@ -308,7 +308,7 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		$global_friend_user_ids = s8d_bpaf_get_global_friends();
 
 		$users = get_users( array(
-		//	'fields' => 'user_nicename'
+			//'fields' => 'user_nicename' // This is returning numeric, wtf?
 			'exclude' => $global_friend_user_ids
 		 ) );
 
@@ -325,46 +325,3 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 
 } // Class
 s8d_BuddyPress_Automatic_Friends_Admin::instance();
-
-/*
-// Register the column
-function price_column_register( $columns ) {
-    $columns['price'] = __( 'Global Friend', 'my-plugin' );
-
-    return $columns;
-}
-add_filter( 'manage_users_columns', 'price_column_register' );
-
-// Display the column content
-function price_column_display( $column_name, $post_id ) {
-    if ( 'price' != $column_name )
-        return;
-
-    $price = get_post_meta($post_id, 'price', true);
-    if ( !$price )
-        $price = '<em>' . __( 'undefined', 'my-plugin' ) . '</em>';
-
-    echo $price;
-}
-add_action( 'manage_users_custom_column', 'price_column_display', 10, 2 );
-
-// Register the column as sortable
-function price_column_register_sortable( $columns ) {
-    $columns['price'] = 'price';
-
-    return $columns;
-}
-add_filter( 'manage_edit-user_sortable_columns', 'price_column_register_sortable' );
-
-function price_column_orderby( $vars ) {
-    if ( isset( $vars['orderby'] ) && 'price' == $vars['orderby'] ) {
-        $vars = array_merge( $vars, array(
-            'meta_key' => 'price',
-            'orderby' => 'meta_value_num'
-        ) );
-    }
-
-    return $vars;
-}
-add_filter( 'request', 'price_column_orderby' );
-*/
