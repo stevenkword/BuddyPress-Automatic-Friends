@@ -1,11 +1,24 @@
 jQuery( document ).ready( function( $ ) {
-	$( "#other" ).autocomplete({
-      source: ajaxurl + '?action=bpaf_global_friend_suggest',
-      select: function( event, ui ) {
-      	$('#add-global-friend').attr('disabled', false);
-      },
-      search: function( event, ui ) {
-      	$('#add-global-friend').attr('disabled', true);
-      }
+	var $addGlobalFriendField = $('#add-global-friend-field');
+	var $addGlobalFriendButton = $('#add-global-friend-button');
+
+	$addGlobalFriendField.autocomplete({
+    	source: ajaxurl + '?action=bpaf_global_friend_suggest',
+      	select: function( event, ui ) {
+      		$addGlobalFriendButton.attr('disabled', false);
+      		$addGlobalFriendButton.focus();
+      		updateFieldTextColor();
+      	},
+      	search: function( event, ui ) {
+      		$addGlobalFriendButton.attr('disabled', true);
+      		$addGlobalFriendField.css( 'color', '#aaa' );
+      		updateFieldTextColor();
+      	}
     });
+
+   function updateFieldTextColor() {
+   		var buttonTextColor = $addGlobalFriendButton.css('color');
+   		$addGlobalFriendField.css( 'color', buttonTextColor );
+   };
+
 });
