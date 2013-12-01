@@ -42,7 +42,7 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		add_action( is_multisite() ? 'network_admin_menu' : 'admin_menu', array( $this, 'action_admin_menu' ), 11 );
 
 		/* We don't need any of these things in other places */
-		if( 'users.php' != $pagenow || 's8d-bpaf-settings' != $_REQUEST[ 'page' ] ) {
+		if( 'users.php' != $pagenow || ( isset( $_REQUEST[ 'page' ] ) && 's8d-bpaf-settings' != $_REQUEST[ 'page' ] ) ) {
 			return;
 		}
 
