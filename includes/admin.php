@@ -211,21 +211,21 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 				<div class="inner-sidebar" id="side-info-column">
 					<div id="side-sortables" class="meta-box-sortables ui-sortable">
 						<div id="bpaf_display_optin" class="postbox ">
-							<h3 class="hndle"><span>Help Improve BPAF</span></h3>
+							<h3 class="hndle"><span>Help Improve BP Automatic Friends</span></h3>
 							<div class="inside">
 								<p>We would really appreciate your input to help us continue to improve the product. Find us at GitHub or donate using the button below.</p>
-								<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-									<p style="width: 100%; text-align: center;">
+								<div style="width: 100%; text-align: center;">
+									<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
 										<input type="hidden" name="cmd" value="_s-xclick">
 										<input type="hidden" name="hosted_button_id" value="DWK9EXNAHLZ42">
 										<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
 										<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-									</p>
-								</form>
+									</form>
+								</div>
 							</div>
 						</div>
 						<div id="bpaf_display_contact" class="postbox ">
-							<h3 class="hndle"><span>Contact BPAF</span></h3>
+							<h3 class="hndle"><span>Contact BP Automatic Friends</span></h3>
 							<!--<a href="https://github.com/stevenkword/BuddyPress-Automatic-Friends" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>-->
 							<div class="inside">
 								<ul class="bpaf-contact-links">
