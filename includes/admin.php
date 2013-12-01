@@ -112,10 +112,10 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 	function s8d_bpaf_display_auto_friend_users() {
 		?>
 		<p>When new user accounts are registered, friendships between the new user and each of the following global friends will be created automatically.</p>
-		<h3 style="float: left">Global Friends</h3>
+		<h3 style="float: left; margin:1em 0;padding:0; line-height:2em;">Global Friends</h3>
 		<div style="padding: 1em 0;">
-		<input type="text" name="other" id="other" style="margin-left: 1em;"value="Search by Username" onfocus="if (this.value == 'Search by Username') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search by Username';}" size="40" maxlength="128">
-		<button id="add-global-friend" class="button" disabled="disabled">Add User</button>
+		<input type="text" name="add-global-friend-field" id="add-global-friend-field" style="margin-left: 1em; color: #aaa;"value="Search by Username" onfocus="if (this.value == 'Search by Username') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search by Username';}" size="40" maxlength="128">
+		<button id="add-global-friend-button" class="button" disabled="disabled">Add User</button>
 		</div>
 		<?php
 
@@ -125,7 +125,7 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 
 		$friend_user_ids = $global_friend_user_ids = s8d_bpaf_get_global_friends();
 
-		echo '<table class="wp-list-table widefat fixed users" cellspacing="0">';
+		echo '<table class="wp-list-table widefat fixed users" cellspacing="0" style="clear:left;">';
 		?>
 		<thead>
 			<tr>
@@ -191,10 +191,36 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 
 	function s8d_bpaf_settings_page() {
 		?>
-		<div class="wrap" style="margin-right: 320px;">
+		<div class="wrap">
 			<?php //screen_icon(); ?>
 			<h2>BuddyPress Automatic Friends</h2>
-			<?php $this->s8d_bpaf_display_auto_friend_users();?>
+			<div id="poststuff" class="metabox-holder has-right-sidebar">
+				<div class="inner-sidebar" id="side-info-column">
+					<div id="side-sortables" class="meta-box-sortables ui-sortable">
+						<div id="bpaf_display_optin" class="postbox ">
+							<h3 class="hndle"><span>Help Improve BPAF</span></h3>
+							<div class="inside">
+								<p>We would really appreciate your input to help us continue to improve the product. Find us at GitHub or donate using hte link below.</p>
+								<p><input type="button" value="Donate" id="bpaf-donate-button" class="button button-small"><br></p>
+							</div>
+						</div>
+						<div id="bpaf_display_contact" class="postbox ">
+							<h3 class="hndle"><span>Contact BPAF</span></h3>
+							<!--<a href="https://github.com/stevenkword/BuddyPress-Automatic-Friends" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>-->
+							<div class="inside">
+								<ul class="bpaf_contacts">
+									<li><a href="http://wordpress.org/support/plugin/bp-automatic-friends" target="_blank"><span class="icon icon-wordpress"></span> BPAF Forum</a></li>
+									<li><a href="http://stevenword.com/plugins/bp-automatic-friends/" target="_blank"><span class="icon icon-plugin"></span> BPAF on the Web</a></li>
+									<li><a href="http://wordpress.org/support/view/plugin-reviews/bp-automatic-friends" target="_blank"><span class="icon icon-star "></span> Review BPAF on WordPress.org</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="post-body-content">
+					<?php $this->s8d_bpaf_display_auto_friend_users();?>
+				</div>
+			</div>
 		</div><!--/.wrap-->
 		<?php
 	}
