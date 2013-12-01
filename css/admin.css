@@ -16,7 +16,7 @@
 .link-bpaf-review::before {
 	display: inline-block;
 	-webkit-font-smoothing: antialiased;
-	font: normal 24px/1 'Genericons';
+	font: normal 1.5em/1 'Genericons';
 	vertical-align: middle;
 	padding-right: 0.25em;
 }
