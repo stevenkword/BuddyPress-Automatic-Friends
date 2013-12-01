@@ -8,7 +8,6 @@ Author: Steven K. Word
 Author URI: http://stevenword.com/
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DWK9EXNAHLZ42
 
 Copyright 2013 Steven K. Word
 
