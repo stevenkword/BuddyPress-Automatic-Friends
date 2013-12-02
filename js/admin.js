@@ -51,11 +51,10 @@ jQuery( document ).ready( function( $ ) {
 	// Remove a Global Friend
 	$('.trash').click( function(e) {
 		var $self = $(this);
-		var $parentTR = $self.parents('tr');
+		var $parentTableRow = $self.parents('tr');
+		var userID = $parentTableRow.find('.bpaf-user-id').val();
 
-		//you need to get the id/username here from the parent
-
-		var params = { 'username':$addGlobalFriendField.val() };
+		var params = { 'ID':userID };
 
 		$.ajax({
 			url: ajaxurl + '?action=bpaf_delete_global_friend',
@@ -69,7 +68,7 @@ jQuery( document ).ready( function( $ ) {
 			},
 			success: function() {
 				$('.spinner').hide();
-				$parentTR.remove();
+				$parentTableRow.remove();
 			}
 		});
 	});

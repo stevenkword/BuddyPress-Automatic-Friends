@@ -135,36 +135,38 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 
 		$friend_user_ids = $global_friend_user_ids = s8d_bpaf_get_global_friends();
 
-		echo '<table class="wp-list-table widefat fixed users" cellspacing="0" style="clear:left;">';
 		?>
-		<thead>
-			<tr>
-			  <th scope="col" id="username" class="manage-column column-username sortable desc" style=""><a><span> Username</span></a></th>
-			  <th scope="col" id="name" class="manage-column column-name sortable desc" style=""><a><span>Name</span></a></th>
-			  <th scope="col" id="friends" class="manage-column column-friends sortable desc" style=""><a><span>Friends</span></a></th>
-			</tr>
-		</thead>
-		<?php
-		$i = 1;
-		foreach($friend_user_ids as $friend_user_id){
-			$friend_userdata = get_userdata( $friend_user_id );
-			if( $friend_userdata ){
-				// Add a row to the table
-				$this->render_global_friend_table_row( $friend_user_id, $i );
-			}//if
-			$i++;
-		}//foreach
-		unset( $i );
+		<form id="global-friends-form">
+		<table class="wp-list-table widefat fixed users" cellspacing="0" style="clear:left;">
+			<thead>
+				<tr>
+				  <th scope="col" id="username" class="manage-column column-username sortable desc" style=""><a><span> Username</span></a></th>
+				  <th scope="col" id="name" class="manage-column column-name sortable desc" style=""><a><span>Name</span></a></th>
+				  <th scope="col" id="friends" class="manage-column column-friends sortable desc" style=""><a><span>Friends</span></a></th>
+				</tr>
+			</thead>
+			<?php
+			$i = 1;
+			foreach($friend_user_ids as $friend_user_id){
+				$friend_userdata = get_userdata( $friend_user_id );
+				if( $friend_userdata ){
+					// Add a row to the table
+					$this->render_global_friend_table_row( $friend_user_id, $i );
+				}//if
+				$i++;
+			}//foreach
+			unset( $i );
 
-		?>
-		<tfoot>
-			<tr>
-			  <th scope="col" id="username" class="manage-column column-username sortable desc" style=""><a><span> Username</span></a></th>
-			  <th scope="col" id="name" class="manage-column column-name sortable desc" style=""><a><span>Name</span></a></th>
-			  <th scope="col" id="friends" class="manage-column column-friends sortable desc" style=""><a><span>Friends</span></a></th>
-			</tr>
-		</tfoot>
+			?>
+			<tfoot>
+				<tr>
+				  <th scope="col" id="username" class="manage-column column-username sortable desc" style=""><a><span> Username</span></a></th>
+				  <th scope="col" id="name" class="manage-column column-name sortable desc" style=""><a><span>Name</span></a></th>
+				  <th scope="col" id="friends" class="manage-column column-friends sortable desc" style=""><a><span>Friends</span></a></th>
+				</tr>
+			</tfoot>
 		</table>
+		</form>
 		<?php
 	}
 
@@ -305,7 +307,7 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		 	die;
 		}
 
-		// Add Friend
+		// Add Global Friend status
 		$user = get_user_by( 'login', $_REQUEST[ 'username' ] );
 		if( isset( $user->data->ID ) ) {
 			// Update the user and related friendships
@@ -325,8 +327,9 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		}
 		$friend_userdata = get_userdata( $friend_user_id );
 		?>
-		<tr id="user-<?php echo $friend_user_id;?>" <?php if( 0 == $i % 2 ) echo 'class="alternate"'; ?>>
+		<tr <?php if( 0 == $i % 2 ) echo 'class="alternate"'; ?>>
 		  <td class="username column-username">
+		  	<input class="bpaf-user-id" id="bpaf-user-<?php echo $friend_user_id;?>" type="hidden" value="<?php echo $friend_user_id; ?>"></input>
 			<?php echo get_avatar( $friend_user_id, 32 ); ?>
 			<strong><?php echo $friend_userdata->user_login;?></strong>
 			<br>
@@ -353,16 +356,13 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		//	wp_die( $this->nonce_fail_message );
 		//}
 
-		if( ! isset( $_REQUEST[ 'username' ] ) && empty( $_REQUEST[ 'username' ] ) ) {
+		if( ! isset( $_REQUEST[ 'ID' ] ) && empty( $_REQUEST[ 'ID' ] ) ) {
 		 	die;
 		}
 
-		// Add Friend
-		$user = get_user_by( 'login', $_REQUEST[ 'username' ] );
-		if( isset( $user->data->ID ) ) {
-			update_usermeta( $user->data->ID, s8d_BuddyPress_Automatic_Friends_Core::METAKEY, true );
-			s8d_bpaf_create_friendships( $user->data->ID );
-		}
+		// Remove Global Friend status
+		update_usermeta( $_REQUEST[ 'ID' ], s8d_BuddyPress_Automatic_Friends_Core::METAKEY, false );
+		s8d_bpaf_destroy_friendships( $_REQUEST[ 'ID' ] );
 		die;
 	}
 
