@@ -312,6 +312,8 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		if( isset( $user->data->ID ) ) {
 			// Update the user and related friendships
 			update_usermeta( $user->data->ID, s8d_BuddyPress_Automatic_Friends_Core::METAKEY, true );
+
+			// This is wrong MMMMMKay! This is looking for a newly registred user, not a global friend
 			s8d_bpaf_create_friendships( $user->data->ID );
 
 			// Add a new row to the table

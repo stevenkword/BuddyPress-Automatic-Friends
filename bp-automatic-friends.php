@@ -154,24 +154,12 @@ function s8d_bpaf_create_friendships( $initiator_user_id ) {
 		$friend_user_ids = $global_friend_user_ids;
 
 		foreach ( $friend_user_ids as $friend_user_id ){
-
-			/* Request the friendship */
-			if ( !friends_add_friend( $initiator_user_id, $friend_user_id, $force_accept = true ) ) {
-				return false;
+			// If a friendship between these people already exists, we don't want to do this again
+			if( $initiator_user_id != $friend_user_id && 'not_friends' == BP_Friends_Friendship::check_is_friend( $initiator_user_id, $friend_user_id ) ) {
+				/* Request the friendship */
+				friends_add_friend( $initiator_user_id, $friend_user_id, $force_accept = true );
+				s8d_bpaf_update_friendship_counts( $initiator_user_id );
 			}
-			else {
-				/* Get friends of $user_id */
-				$friend_ids = BP_Friends_Friendship::get_friend_user_ids( $initiator_user_id );
-
-				/* Loop through the initiator's friends and update their friend counts */
-				foreach ( (array) $friend_ids as $friend_id ) {
-					BP_Friends_Friendship::total_friend_count( $friend_id );
-				}
-
-				/* Update initiator friend counts */
-				BP_Friends_Friendship::total_friend_count( $initiator_user_id );
-			}
-
 		}
 
 	}
@@ -188,4 +176,17 @@ function s8d_bpaf_create_friendships( $initiator_user_id ) {
  */
 function s8d_bpaf_destroy_friendships( $initiator_user_id ) {
 
+}
+
+function s8d_bpaf_update_friendship_counts( $initiator_user_id ) {
+	/* Get friends of $user_id */
+	$friend_ids = BP_Friends_Friendship::get_friend_user_ids( $initiator_user_id );
+
+	/* Loop through the initiator's friends and update their friend counts */
+	foreach ( (array) $friend_ids as $friend_id ) {
+		BP_Friends_Friendship::total_friend_count( $friend_id );
+	}
+
+	/* Update initiator friend counts */
+	BP_Friends_Friendship::total_friend_count( $initiator_user_id );
 }
