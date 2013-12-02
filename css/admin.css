@@ -10,6 +10,11 @@
 	vertical-align: middle;
 }
 
+body.mp6 .wrap h2:before {
+	content: "\f307"; /* `people` dashicon glyph */
+	font: normal 32px/1 'Dashicons';
+}
+
 .link-bpaf-forum::before,
 .link-bpaf-web::before,
 .link-bpaf-github::before,
