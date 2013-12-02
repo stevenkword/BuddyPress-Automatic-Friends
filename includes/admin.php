@@ -4,13 +4,9 @@
  */
 class s8d_BuddyPress_Automatic_Friends_Admin {
 
-	/* Post Type */
-	public $post_type_slug = 'slide';
+	const SCRIPTS_VERSION    = '2';
 
 	public $plugins_url;
-
-	/* Option Name */
-	const SCRIPTS_VERSION    = '1';
 
 	/* Define and register singleton */
 	private static $instance = false;
@@ -41,6 +37,11 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		// Admin Menu
 		add_action( is_multisite() ? 'network_admin_menu' : 'admin_menu', array( $this, 'action_admin_menu' ), 11 );
 
+		// AJAX
+		add_action( 'wp_ajax_bpaf_suggest_global_friend', array( $this, 'action_ajax_bpaf_suggest_global_friend' ) );
+		add_action( 'wp_ajax_bpaf_add_global_friend', array( $this, 'action_ajax_bpaf_add_global_friend' ) );
+		add_action( 'wp_ajax_bpaf_delete_global_friend', array( $this, 'action_ajax_bpaf_delete_global_friend' ) );
+
 		/* We don't need any of these things in other places */
 		if( 'users.php' != $pagenow || ! isset( $_REQUEST[ 'page' ] ) || 's8d-bpaf-settings' != $_REQUEST[ 'page' ] ) {
 			return;
@@ -54,10 +55,6 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		add_action( 'personal_options', array( $this, 'action_personal_options' )  );
 		add_action( 'personal_options_update', array( $this, 'action_personal_options_update' ) );
 		add_action( 'edit_user_profile_update', array( $this, 'action_personal_options_update' ) );
-
-		// AJAX
-		add_action( 'wp_ajax_bpaf_global_friend_suggest', array( $this, 'action_ajax_bpaf_global_friend_suggest' ) );
-		//add_action( 'wp_ajax_update_slide', array( $this, 'action_wp_ajax_update_slide' ) );
 	}
 
 	/**
@@ -213,7 +210,7 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 						<div id="bpaf_display_optin" class="postbox ">
 							<h3 class="hndle"><span>Help Improve BP Automatic Friends</span></h3>
 							<div class="inside">
-								<p>We would really appreciate your input to help us continue to improve the product. Find us at GitHub or donate using the button below.</p>
+								<p>We would really appreciate your input to help us continue to improve the product. Find us on <a href="https://github.com/stevenkword/BuddyPress-Automatic-Friends" target="_blank">GitHub</a> or donate using the button below.</p>
 								<div style="width: 100%; text-align: center;">
 									<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
 										<input type="hidden" name="cmd" value="_s-xclick">
@@ -299,7 +296,7 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		BP_Friends_Friendship::total_friend_count( $user_id );
 	}
 
-	function action_ajax_bpaf_global_friend_suggest() {
+	function action_ajax_bpaf_suggest_global_friend() {
 		// Nonce check
 		//if ( ! wp_verify_nonce( $_REQUEST[ 'nonce' ], $this->nonce_field ) ) {
 		//	wp_die( $this->nonce_fail_message );
@@ -312,7 +309,6 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 			'exclude' => $global_friend_user_ids
 		 ) );
 
-
 		$user_ids = array();
 		foreach( $users as $user ) {
 			$user_ids[] = $user->data->user_login;
@@ -320,6 +316,16 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 
 		header('Content-Type: application/x-json');
 		echo $json = json_encode( $user_ids );
+		die;
+	}
+
+	function action_ajax_bpaf_add_global_friend() {
+		// Add Friend
+		die;
+	}
+
+	function action_ajax_bpaf_delete_global_friend() {
+		// Remove Friend
 		die;
 	}
 

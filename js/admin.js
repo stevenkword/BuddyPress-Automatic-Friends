@@ -3,7 +3,7 @@ jQuery( document ).ready( function( $ ) {
 	var $addGlobalFriendButton = $('#add-global-friend-button');
 
 	$addGlobalFriendField.autocomplete({
-    	source: ajaxurl + '?action=bpaf_global_friend_suggest',
+    	source: ajaxurl + '?action=bpaf_suggest_global_friend',
       	select: function( event, ui ) {
       		$addGlobalFriendButton.attr('disabled', false);
       		$addGlobalFriendButton.focus();
