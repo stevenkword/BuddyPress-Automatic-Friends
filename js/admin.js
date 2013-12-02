@@ -21,4 +21,57 @@ jQuery( document ).ready( function( $ ) {
    		$addGlobalFriendField.css( 'color', buttonTextColor );
    };
 
+
+
+	// Add a Global Friend
+	$addGlobalFriendButton.click( function(e) {
+		var $self = $(this);
+		var $parentTable = $('.wp-list-table'); // TODO: way too general
+		var params = { 'username':$addGlobalFriendField.val() };
+
+		// Send the contents of the existing post
+		$.ajax({
+			url: ajaxurl + '?action=bpaf_add_global_friend',
+			type: 'POST',
+			data: jQuery.param(params),
+			beforeSend: function() {
+				$('.spinner').show();
+			},
+			complete: function() {
+				//$('.spinner').hide();
+			},
+			success: function(result) {
+				$('.spinner').hide();
+				// Return the excerpt from the editor
+				$parentTable.append(result);
+			}
+		});
+	});
+
+	// Remove a Global Friend
+	$('.trash').click( function(e) {
+		var $self = $(this);
+		var $parentTR = $self.parents('tr');
+
+		//you need to get the id/username here from the parent
+
+		var params = { 'username':$addGlobalFriendField.val() };
+
+		$.ajax({
+			url: ajaxurl + '?action=bpaf_delete_global_friend',
+			type: 'POST',
+			data: jQuery.param(params),
+			beforeSend: function() {
+				$('.spinner').show();
+			},
+			complete: function() {
+				//$('.spinner').hide();
+			},
+			success: function() {
+				$('.spinner').hide();
+				$parentTR.remove();
+			}
+		});
+	});
+
 });

@@ -42,6 +42,11 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		add_action( 'wp_ajax_bpaf_add_global_friend', array( $this, 'action_ajax_bpaf_add_global_friend' ) );
 		add_action( 'wp_ajax_bpaf_delete_global_friend', array( $this, 'action_ajax_bpaf_delete_global_friend' ) );
 
+		// User options
+		add_action( 'personal_options', array( $this, 'action_personal_options' )  );
+		add_action( 'personal_options_update', array( $this, 'action_personal_options_update' ) );
+		add_action( 'edit_user_profile_update', array( $this, 'action_personal_options_update' ) );
+
 		/* We don't need any of these things in other places */
 		if( 'users.php' != $pagenow || ! isset( $_REQUEST[ 'page' ] ) || 's8d-bpaf-settings' != $_REQUEST[ 'page' ] ) {
 			return;
@@ -51,10 +56,6 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		add_action( 'admin_init', array( $this, 'action_admin_init' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'action_admin_enqueue_scripts' ), 11 );
 
-		// User options
-		add_action( 'personal_options', array( $this, 'action_personal_options' )  );
-		add_action( 'personal_options_update', array( $this, 'action_personal_options_update' ) );
-		add_action( 'edit_user_profile_update', array( $this, 'action_personal_options_update' ) );
 	}
 
 	/**
@@ -124,8 +125,9 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		<p>When new user accounts are registered, friendships between the new user and each of the following global friends will be created automatically.</p>
 		<h3 style="float: left; margin:1em 0;padding:0; line-height:2em;">Global Friends</h3>
 		<div style="padding: 1em 0;">
-		<input type="text" name="add-global-friend-field" id="add-global-friend-field" style="margin-left: 1em; color: #aaa;"value="Search by Username" onfocus="if (this.value == 'Search by Username') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search by Username';}" size="40" maxlength="128">
-		<button id="add-global-friend-button" class="button" disabled="disabled">Add User</button>
+			<input type="text" name="add-global-friend-field" id="add-global-friend-field" style="margin-left: 1em; color: #aaa;"value="Search by Username" onfocus="if (this.value == 'Search by Username') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search by Username';}" size="40" maxlength="128">
+			<button id="add-global-friend-button" class="button" disabled="disabled">Add User</button>
+			<span class="spinner"></span>
 		</div>
 		<?php
 
@@ -151,31 +153,8 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 			$friend_userdata = get_userdata( $friend_user_id );
 
 			if( $friend_userdata ){
-				/* Avatar */
-				?>
-				<tr id="user-<?php echo $friend_user_id;?>" <?php if( 0 == $i % 2 ) echo 'class="alternate"'; ?>>
-				  <td class="username column-username">
-					<?php echo get_avatar( $friend_user_id, 32 ); ?>
-					<strong><?php echo $friend_userdata->user_login;?></strong>
-					<br>
-					<div class="row-actions">
-					  <span class="edit">
-						<a href="<?php echo get_edit_user_link( $friend_user_id ); ?>">
-						  Edit
-						</a>
-					  </span>
-					</div>
-				  </td>
-
-				  <td class="name column-name">
-					<?php echo $friend_userdata->display_name;?>
-				  </td>
-
-				  <td class="friends column-friends">
-					  <?php echo BP_Friends_Friendship::total_friend_count( $friend_user_id );?>
-				  </td>
-				</tr>
-				<?php
+				// Add a row to the table
+				$this->render_global_friend_table_row( $friend_user_id, $i );
 			}//if
 			$i++;
 		}//foreach
@@ -210,7 +189,8 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 						<div id="bpaf_display_optin" class="postbox ">
 							<h3 class="hndle"><span>Help Improve BP Automatic Friends</span></h3>
 							<div class="inside">
-								<p>We would really appreciate your input to help us continue to improve the product. Find us on <a href="https://github.com/stevenkword/BuddyPress-Automatic-Friends" target="_blank">GitHub</a> or donate using the button below.</p>
+								<p>We would really appreciate your input to help us continue to improve the product.</p>
+								<p>Find us on <a href="https://github.com/stevenkword/BuddyPress-Automatic-Friends" target="_blank">GitHub</a> or donate to the project using the button below.</p>
 								<div style="width: 100%; text-align: center;">
 									<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
 										<input type="hidden" name="cmd" value="_s-xclick">
@@ -289,7 +269,7 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		//if ( !current_user_can( 'edit_user', $user_id ) )
 		//	return false;
 
-		$meta_value = isset( $_POST[ 'global-friend' ] ) ? true : false;
+		$meta_value = isset( $_REQUEST[ 'global-friend' ] ) ? true : false;
 		update_usermeta( $user_id, s8d_BuddyPress_Automatic_Friends_Core::METAKEY, $meta_value );
 
 		// Update the friend counts
@@ -320,12 +300,69 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 	}
 
 	function action_ajax_bpaf_add_global_friend() {
+		// Nonce check
+		//if ( ! wp_verify_nonce( $_REQUEST[ 'nonce' ], $this->nonce_field ) ) {
+		//	wp_die( $this->nonce_fail_message );
+		//}
+
+		if( ! isset( $_REQUEST[ 'username' ] ) && empty( $_REQUEST[ 'username' ] ) ) {
+		 	die;
+		}
+
 		// Add Friend
+		$user = get_user_by( 'login', $_REQUEST[ 'username' ] );
+		if( isset( $user->data->ID ) ) {
+			// Update the user and related friendships
+			update_usermeta( $user->data->ID, s8d_BuddyPress_Automatic_Friends_Core::METAKEY, true );
+			s8d_bpaf_create_friendships( $user->data->ID );
+
+			// Add a new row to the table
+			$this->render_global_friend_table_row( $user->data->ID );
+		}
 		die;
 	}
 
+	function render_global_friend_table_row( $friend_user_id, $i = 0 ) {
+		$friend_userdata = get_userdata( $friend_user_id );
+		?>
+		<tr id="user-<?php echo $friend_user_id;?>" <?php if( 0 == $i % 2 ) echo 'class="alternate"'; ?>>
+		  <td class="username column-username">
+			<?php echo get_avatar( $friend_user_id, 32 ); ?>
+			<strong><?php echo $friend_userdata->user_login;?></strong>
+			<br>
+			<div class="row-actions">
+				<span class="edit"><a href="<?php echo get_edit_user_link( $friend_user_id ); ?>" title="Edit this item">Edit</a> | </span>
+				<span id="remove-<?php echo $friend_userdata->user_login;?>" class="trash"><a class="submitdelete" title="Move this item to the Trash" href="javascript:void(0);">Remove</a></span>
+			</div>
+		  </td>
+
+		  <td class="name column-name">
+			<?php echo $friend_userdata->display_name;?>
+		  </td>
+
+		  <td class="friends column-friends">
+			  <?php echo BP_Friends_Friendship::total_friend_count( $friend_user_id );?>
+		  </td>
+		</tr>
+		<?php
+	}
+
 	function action_ajax_bpaf_delete_global_friend() {
-		// Remove Friend
+		// Nonce check
+		//if ( ! wp_verify_nonce( $_REQUEST[ 'nonce' ], $this->nonce_field ) ) {
+		//	wp_die( $this->nonce_fail_message );
+		//}
+
+		if( ! isset( $_REQUEST[ 'username' ] ) && empty( $_REQUEST[ 'username' ] ) ) {
+		 	die;
+		}
+
+		// Add Friend
+		$user = get_user_by( 'login', $_REQUEST[ 'username' ] );
+		if( isset( $user->data->ID ) ) {
+			update_usermeta( $user->data->ID, s8d_BuddyPress_Automatic_Friends_Core::METAKEY, true );
+			s8d_bpaf_create_friendships( $user->data->ID );
+		}
 		die;
 	}
 
