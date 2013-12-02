@@ -107,11 +107,9 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 	 * @return null
 	 */
 	function action_admin_menu() {
-
 		if ( !is_super_admin() )
 			return false;
 
-		//add_submenu_page( 'bp-general-settings', __( 'BuddyPress Automatic Friends', 's8d-bpaf-settings'), __( 'Automatic Friends', 's8d-bpaf-settings' ), 'manage_options', 's8d-bpaf-settings', array( $this, 's8d_bpaf_settings_page' ) );
 		add_users_page( __( 'BuddyPress Automatic Friends', 's8d-bpaf-settings'), __( 'Automatic Friends', 's8d-bpaf-settings' ), 'manage_options', 's8d-bpaf-settings', array( $this, 's8d_bpaf_settings_page' ) );
 	}
 
@@ -147,11 +145,9 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 			</tr>
 		</thead>
 		<?php
-		$i = 0;
+		$i = 1;
 		foreach($friend_user_ids as $friend_user_id){
-
 			$friend_userdata = get_userdata( $friend_user_id );
-
 			if( $friend_userdata ){
 				// Add a row to the table
 				$this->render_global_friend_table_row( $friend_user_id, $i );
@@ -322,7 +318,11 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		die;
 	}
 
-	function render_global_friend_table_row( $friend_user_id, $i = 0 ) {
+	function render_global_friend_table_row( $friend_user_id, $i = '' ) {
+		if( ! isset( $i ) || '' == $i ) {
+			$i = count( s8d_bpaf_get_global_friends() );
+			echo $i;
+		}
 		$friend_userdata = get_userdata( $friend_user_id );
 		?>
 		<tr id="user-<?php echo $friend_user_id;?>" <?php if( 0 == $i % 2 ) echo 'class="alternate"'; ?>>
