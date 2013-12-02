@@ -134,7 +134,6 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		$friend_user_ids = explode(',', $s8d_bpaf_user_ids);
 
 		$friend_user_ids = $global_friend_user_ids = s8d_bpaf_get_global_friends();
-
 		?>
 		<form id="global-friends-form">
 		<table class="wp-list-table widefat fixed users" cellspacing="0" style="clear:left;">
@@ -147,16 +146,19 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 			</thead>
 			<?php
 			$i = 1;
-			foreach($friend_user_ids as $friend_user_id){
-				$friend_userdata = get_userdata( $friend_user_id );
-				if( $friend_userdata ){
-					// Add a row to the table
-					$this->render_global_friend_table_row( $friend_user_id, $i );
-				}//if
-				$i++;
-			}//foreach
-			unset( $i );
-
+			if( is_array( $friend_user_ids ) && 0 < count( $friend_user_ids ) ) {
+				foreach( $friend_user_ids as $friend_user_id ){
+					$friend_userdata = get_userdata( $friend_user_id );
+					if( $friend_userdata ){
+						// Add a row to the table
+						$this->render_global_friend_table_row( $friend_user_id, $i );
+					}//if
+					$i++;
+				}//foreach
+				unset( $i );
+			} else {
+				echo '<tr><td colspan="3">No Global Friends found.</td></tr>';
+			}
 			?>
 			<tfoot>
 				<tr>

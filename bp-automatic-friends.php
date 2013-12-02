@@ -175,7 +175,8 @@ function s8d_bpaf_create_friendships( $initiator_user_id ) {
  * @return null
  */
 function s8d_bpaf_destroy_friendships( $initiator_user_id ) {
-
+	BP_Friends_Friendship::delete_all_for_user( $initiator_user_id );
+	s8d_bpaf_update_friendship_counts( $initiator_user_id );
 }
 
 function s8d_bpaf_update_friendship_counts( $initiator_user_id ) {

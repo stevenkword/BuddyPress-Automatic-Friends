@@ -50,6 +50,13 @@ jQuery( document ).ready( function( $ ) {
 
 	// Remove a Global Friend
 	$('.trash').click( function(e) {
+
+		e.preventDefault();
+
+		var confirmDelete = confirm("Removing this user will delete ALL friendships related the this user. 'Cancel' to stop, 'OK' to delete.");
+		if( false === confirmDelete )
+			return;
+
 		var $self = $(this);
 		var $parentTableRow = $self.parents('tr');
 		var userID = $parentTableRow.find('.bpaf-user-id').val();
