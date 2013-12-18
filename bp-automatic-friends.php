@@ -31,33 +31,42 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 class s8d_BuddyPress_Automatic_Friends_Core {
 
-	const VERSION    = '2.0';
-	const METAKEY    = 's8d_bpaf_global_friend';
-	const OPTION     = 's8d_bpaf_options';
+	const REVISION = '20131214';
+	const NONCE    = 's8d_bpaf_nonce';
+	const METAKEY  = 's8d_bpaf_global_friend';
+	const OPTION   = 's8d_bpaf_options';
 
 	/* Define and register singleton */
 	private static $instance = false;
 	public static function instance() {
 		if( ! self::$instance ) {
-			self::$instance = new s8d_BuddyPress_Automatic_Friends_Core;
+			self::$instance = new self;
+			self::$instance->setup();
 		}
 		return self::$instance;
 	}
 
 	/**
-	 * Gene manipulation algorithms go here
+	 * Constructor
+     *
+	 * @since 2.0.0
+	 */
+	private function __construct() { }
+
+	/**
+	 * Clone
+     *
+	 * @since 2.0.0
 	 */
 	private function __clone() { }
 
 	/**
-	 * Register actions and filters
+	 * Add actions and filters
 	 *
-	 * @uses add_action()
-	 * @return null
+	 * @uses add_action, add_filter
+	 * @since 2.0.0
 	 */
-	public function __construct() {
-
-	}
+	function setup() { }
 }
 s8d_BuddyPress_Automatic_Friends_Core::instance();
 
@@ -66,7 +75,8 @@ s8d_BuddyPress_Automatic_Friends_Core::instance();
 
 
 /**
- * Loader function only fires if BuddyPress exists
+ * Loader function only fires if BuddyPress exists.
+ *
  * @uses is_admin, add_action
  * @action bp_loaded
  * @return null
@@ -85,8 +95,9 @@ function s8d_bpaf_loader(){
 add_action( 'bp_loaded', 's8d_bpaf_loader' );
 
 /**
- * New method for creating friendships at first login
- * Prevents conflict with plugins such as "Disable Activation" that bypass the activation process
+ * New method for creating friendships at first login.
+ *
+ * Prevents conflict with plugins such as "Disable Activation" that bypass the activation process.
  *
  * Hook into the 'wp' action and check if the user is logged in
  * and if get_user_meta( $bp->loggedin_user->id, 'last_activity' ) is false.

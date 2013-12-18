@@ -12,23 +12,33 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 	private static $instance = false;
 	public static function instance() {
 		if( ! self::$instance ) {
-			self::$instance = new s8d_BuddyPress_Automatic_Friends_Admin;
+			self::$instance = new self;
+			self::$instance->setup();
 		}
 		return self::$instance;
 	}
 
 	/**
-	 * Gene manipulation algorithms go here
+	 * Constructor
+     *
+	 * @since 2.0.0
+	 */
+	private function __construct() { }
+
+	/**
+	 * Clone
+     *
+	 * @since 2.0.0
 	 */
 	private function __clone() { }
 
 	/**
-	 * Register actions and filters
+	 * Add actions and filters
 	 *
-	 * @uses add_action()
-	 * @return null
+	 * @uses add_action, add_filter
+	 * @since 2.0.0
 	 */
-	public function __construct() {
+	function setup() {
 		global $pagenow;
 
 		// Setup
@@ -101,21 +111,23 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 	}
 
 	/**
-	 * Setup Admin Menu Options & Settings
+	 * Setup Admin Menu Options & Settings.
+	 *
 	 * @uses is_super_admin, add_submenu_page
 	 * @action network_admin_menu, admin_menu
 	 * @return null
 	 */
 	function action_admin_menu() {
-		if ( !is_super_admin() )
+		if ( ! is_super_admin() )
 			return false;
 
 		add_users_page( __( 'BuddyPress Automatic Friends', 's8d-bpaf-settings'), __( 'Automatic Friends', 's8d-bpaf-settings' ), 'manage_options', 's8d-bpaf-settings', array( $this, 's8d_bpaf_settings_page' ) );
 	}
 
 	/**
-	 * Display the friends automatically added in the admin options
-	 * @since v1.5
+	 * Display the friends automatically added in the admin options.
+	 *
+	 * @since 1.5.0
 	 * @return null
 	 */
 	function s8d_bpaf_display_auto_friend_users() {
@@ -136,6 +148,7 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		$friend_user_ids = $global_friend_user_ids = s8d_bpaf_get_global_friends();
 		?>
 		<form id="global-friends-form">
+		<?php wp_nonce_field( s8d_BuddyPress_Automatic_Friends_Core::NONCE, s8d_BuddyPress_Automatic_Friends_Core::NONCE, false ); ?>
 		<table class="wp-list-table widefat fixed users" cellspacing="0" style="clear:left;">
 			<thead>
 				<tr>
@@ -157,7 +170,7 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 				}//foreach
 				unset( $i );
 			} else {
-				echo '<tr><td colspan="3">No Global Friends found.</td></tr>';
+				echo '<tr class="bpaf-empty-table-row"><td colspan="3">No Global Friends found.</td></tr>';
 			}
 			?>
 			<tfoot>
@@ -173,7 +186,8 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 	}
 
 	/**
-	 * Settings Page
+	 * Settings Page.
+	 *
 	 * @uses get_admin_url, settings_fields, do_settings_sections
 	 * @return null
 	 */
@@ -264,6 +278,9 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		<?php
 	}
 
+	/**
+	 * @since 2.0.0
+	 */
 	function action_personal_options_update( $user_id ) {
 		// @TODO: nonce check
 		//if ( !current_user_can( 'edit_user', $user_id ) )
@@ -276,6 +293,9 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		BP_Friends_Friendship::total_friend_count( $user_id );
 	}
 
+	/**
+	 * @since 2.0.0
+	 */
 	function action_ajax_bpaf_suggest_global_friend() {
 		// Nonce check
 		//if ( ! wp_verify_nonce( $_REQUEST[ 'nonce' ], $this->nonce_field ) ) {
@@ -299,6 +319,9 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		die;
 	}
 
+	/**
+	 * @since 2.0.0
+	 */
 	function action_ajax_bpaf_add_global_friend() {
 		// Nonce check
 		//if ( ! wp_verify_nonce( $_REQUEST[ 'nonce' ], $this->nonce_field ) ) {
@@ -324,6 +347,9 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		die;
 	}
 
+	/**
+	 * @since 2.0.0
+	 */
 	function render_global_friend_table_row( $friend_user_id, $i = '' ) {
 		if( ! isset( $i ) || '' == $i ) {
 			$i = count( s8d_bpaf_get_global_friends() );
@@ -354,6 +380,9 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		<?php
 	}
 
+	/**
+	 * @since 2.0.0
+	 */
 	function action_ajax_bpaf_delete_global_friend() {
 		// Nonce check
 		//if ( ! wp_verify_nonce( $_REQUEST[ 'nonce' ], $this->nonce_field ) ) {
@@ -367,6 +396,9 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		// Remove Global Friend status
 		update_usermeta( $_REQUEST[ 'ID' ], s8d_BuddyPress_Automatic_Friends_Core::METAKEY, false );
 		s8d_bpaf_destroy_friendships( $_REQUEST[ 'ID' ] );
+
+		// Return the number of friends remaning
+		echo $global_friends_remaining = count( s8d_bpaf_get_global_friends() );
 		die;
 	}
 

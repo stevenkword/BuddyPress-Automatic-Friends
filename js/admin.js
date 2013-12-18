@@ -3,25 +3,23 @@ jQuery( document ).ready( function( $ ) {
 	var $addGlobalFriendButton = $('#add-global-friend-button');
 
 	$addGlobalFriendField.autocomplete({
-    	source: ajaxurl + '?action=bpaf_suggest_global_friend',
-      	select: function( event, ui ) {
-      		$addGlobalFriendButton.attr('disabled', false);
-      		$addGlobalFriendButton.focus();
-      		updateFieldTextColor();
-      	},
-      	search: function( event, ui ) {
-      		$addGlobalFriendButton.attr('disabled', true);
-      		$addGlobalFriendField.css( 'color', '#aaa' );
-      		updateFieldTextColor();
-      	}
-    });
+		source: ajaxurl + '?action=bpaf_suggest_global_friend',
+		select: function( event, ui ) {
+			$addGlobalFriendButton.attr('disabled', false);
+			$addGlobalFriendButton.focus();
+			updateFieldTextColor();
+		},
+		search: function( event, ui ) {
+			$addGlobalFriendButton.attr('disabled', true);
+			$addGlobalFriendField.css( 'color', '#aaa' );
+			updateFieldTextColor();
+		}
+	});
 
-   function updateFieldTextColor() {
-   		var buttonTextColor = $addGlobalFriendButton.css('color');
-   		$addGlobalFriendField.css( 'color', buttonTextColor );
-   };
-
-
+	function updateFieldTextColor() {
+		var buttonTextColor = $addGlobalFriendButton.css('color');
+		$addGlobalFriendField.css( 'color', buttonTextColor );
+	}
 
 	// Add a Global Friend
 	$addGlobalFriendButton.click( function(e) {
@@ -43,6 +41,7 @@ jQuery( document ).ready( function( $ ) {
 			success: function(result) {
 				$('.spinner').hide();
 				// Return the excerpt from the editor
+				$('.bpaf-empty-table-row').remove();
 				$parentTable.append(result);
 			}
 		});
@@ -58,6 +57,7 @@ jQuery( document ).ready( function( $ ) {
 			return;
 
 		var $self = $(this);
+		var $parentTable = $('.wp-list-table'); // TODO: way too general
 		var $parentTableRow = $self.parents('tr');
 		var userID = $parentTableRow.find('.bpaf-user-id').val();
 
@@ -73,9 +73,13 @@ jQuery( document ).ready( function( $ ) {
 			complete: function() {
 				//$('.spinner').hide();
 			},
-			success: function() {
+			success: function( response ) {
 				$('.spinner').hide();
 				$parentTableRow.remove();
+				alert( response );
+				if ( 1 >= response ) {
+					$parentTable.append('<tr class="bpaf-empty-table-row"><td colspan="3">No Global Friends found.</td></tr>');
+				}
 			}
 		});
 	});

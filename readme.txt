@@ -3,19 +3,15 @@
 Contributors: Steven K. Word
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DWK9EXNAHLZ42
 Tags: buddypress, plugin, admin, automatic, friends, instant friends, automatic friends, registration, new members
-Requires at least: 3.3
-Tested up to: 3.3.1
-Stable tag: 1.6.2
+Requires at least: 3.5
+Tested up to: 3.8
+Stable tag: 2.0.0
 
 Automatically create and accept friendships for specified users upon new user registration. * Requires BuddyPress
 
 == Description ==
 
 Automatically create and accept friendships for specified users upon new user registration. * Requires BuddyPress
-
-For more information check out:
-
-<a href=http://www.stevenword.com/plugins/bp-automatic-friends/>BP Automatic Friends Page</a>
 
 == Screenshots ==
 
