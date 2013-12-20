@@ -1,10 +1,22 @@
 <?php
 /**
+ * Admin Options
+ *
+ * All of the administrative functionality for BuddyPress Automatic Friends.
+ *
+ * @link http://wordpress.org/plugins/bp-automatic-friends/
+ * @since 2.0.0
+ *
+ * @package BuddyPress Automatic Friends
+ * @subpackage Admin
+ */
+
+/**
  * @since 2.0.0
  */
 class s8d_BuddyPress_Automatic_Friends_Admin {
 
-	const SCRIPTS_VERSION    = '2';
+	const SCRIPTS_VERSION = '2';
 
 	public $plugins_url;
 

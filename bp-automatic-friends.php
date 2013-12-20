@@ -66,58 +66,55 @@ class s8d_BuddyPress_Automatic_Friends_Core {
 	 * @uses add_action, add_filter
 	 * @since 2.0.0
 	 */
-	function setup() { }
-}
-s8d_BuddyPress_Automatic_Friends_Core::instance();
-
-
-
-
-
-/**
- * Loader function only fires if BuddyPress exists.
- *
- * @uses is_admin, add_action
- * @action bp_loaded
- * @return null
- */
-function s8d_bpaf_loader(){
-
-	/* Load the admin */
-	if ( is_admin() ){
-		require_once( dirname(__FILE__) . '/includes/admin.php' );
+	function setup() {
+		add_action( 'bp_loaded', array( $this, 'action_bp_loaded' ) );
 	}
 
-	/* Do this the first time a new user logs in */
-	add_action( 'wp', 's8d_bpaf_first_login' );
+
+	/**
+	 * Loader function only fires if BuddyPress exists.
+	 *
+	 * @uses is_admin, add_action
+	 * @action bp_loaded
+	 * @return null
+	 */
+	function action_bp_loaded(){
+
+		/* Load the admin */
+		if ( is_admin() ){
+			require_once( dirname(__FILE__) . '/includes/admin.php' );
+		}
+
+		/* Do this the first time a new user logs in */
+		add_action( 'wp', array( $this, 's8d_bpaf_first_login' ) );
+	}
+
+	/**
+	 * New method for creating friendships at first login.
+	 *
+	 * Prevents conflict with plugins such as "Disable Activation" that bypass the activation process.
+	 *
+	 * Hook into the 'wp' action and check if the user is logged in
+	 * and if get_user_meta( $bp->loggedin_user->id, 'last_activity' ) is false.
+	 * http://buddypress.trac.wordpress.org/ticket/3003
+	 */
+	function s8d_bpaf_first_login(){
+
+		if( ! is_user_logged_in() )
+			return;
+
+		global $bp;
+
+		$last_login = get_user_meta( $bp->loggedin_user->id, 'last_activity', true );
+
+	// This needs to be re-added after debugging
+	//	if( ! isset( $last_login ) || empty( $last_login ) )
+			s8d_bpaf_create_friendships( $bp->loggedin_user->id );
+
+	}
 
 }
-add_action( 'bp_loaded', 's8d_bpaf_loader' );
-
-/**
- * New method for creating friendships at first login.
- *
- * Prevents conflict with plugins such as "Disable Activation" that bypass the activation process.
- *
- * Hook into the 'wp' action and check if the user is logged in
- * and if get_user_meta( $bp->loggedin_user->id, 'last_activity' ) is false.
- * http://buddypress.trac.wordpress.org/ticket/3003
- */
-function s8d_bpaf_first_login(){
-
-	if( ! is_user_logged_in() )
-		return;
-
-	global $bp;
-
-	$last_login = get_user_meta( $bp->loggedin_user->id, 'last_activity', true );
-
-// This needs to be re-added after debugging
-//	if( ! isset( $last_login ) || empty( $last_login ) )
-		s8d_bpaf_create_friendships( $bp->loggedin_user->id );
-
-}
-
+s8d_BuddyPress_Automatic_Friends_Core::instance();
 
 // @return array|bool
 function s8d_bpaf_get_global_friends() {
