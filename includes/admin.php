@@ -32,14 +32,14 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 
 	/**
 	 * Constructor
-     *
+	 *
 	 * @since 2.0.0
 	 */
 	private function __construct() { }
 
 	/**
 	 * Clone
-     *
+	 *
 	 * @since 2.0.0
 	 */
 	private function __clone() { }
@@ -70,7 +70,7 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		add_action( 'edit_user_profile_update', array( $this, 'action_personal_options_update' ) );
 
 		/* We don't need any of these things in other places */
-		if( 'users.php' != $pagenow || ! isset( $_REQUEST[ 'page' ] ) || 's8d-bpaf-settings' != $_REQUEST[ 'page' ] ) {
+		if( 'users.php' != $pagenow || ! isset( $_REQUEST['page'] ) || 's8d-bpaf-settings' != $_REQUEST['page'] ) {
 			return;
 		}
 
@@ -81,7 +81,8 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 	}
 
 	/**
-	 * Setup the Admin
+	 * Setup the Admin.
+	 *
 	 * @uses register_setting, add_settings_section, add_settings_field
 	 * @action admin_init
 	 * @return null
@@ -110,7 +111,7 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 
 
 	/**
-	 * Enqueue necessary scripts
+	 * Enqueue necessary scripts.
 	 *
 	 * @uses wp_enqueue_script
 	 * @return null
@@ -203,7 +204,6 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 	 * @uses get_admin_url, settings_fields, do_settings_sections
 	 * @return null
 	 */
-
 	function s8d_bpaf_settings_page() {
 		?>
 		<div class="wrap">
@@ -250,7 +250,8 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 	}
 
 	/**
-	 * Instructions
+	 * Instructions.
+	 *
 	 * @return null
 	 */
 	function s8d_bpaf_settings_text() {
@@ -258,7 +259,8 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 	}
 
 	/**
-	 * Form Inputs
+	 * Form Inputs.
+	 *
 	 * @uses get_option
 	 * @return null
 	 */
@@ -272,6 +274,11 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		echo "</p>";
 	}
 
+	/**
+	 * Personal Options.
+	 *
+	 * @return null
+	 */
 	function action_personal_options( $user ) {
 		$meta_value = get_user_meta( $user->ID, s8d_BuddyPress_Automatic_Friends_Core::METAKEY, true );
 		?>
@@ -291,6 +298,8 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 	}
 
 	/**
+	 * Update personal options.
+	 *
 	 * @since 2.0.0
 	 */
 	function action_personal_options_update( $user_id ) {
@@ -298,7 +307,7 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		//if ( !current_user_can( 'edit_user', $user_id ) )
 		//	return false;
 
-		$meta_value = isset( $_REQUEST[ 'global-friend' ] ) ? true : false;
+		$meta_value = isset( $_REQUEST['global-friend'] ) ? true : false;
 		update_usermeta( $user_id, s8d_BuddyPress_Automatic_Friends_Core::METAKEY, $meta_value );
 
 		// Update the friend counts
@@ -306,11 +315,13 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 	}
 
 	/**
+	 * Admin Ajax for finding users.
+	 *
 	 * @since 2.0.0
 	 */
 	function action_ajax_bpaf_suggest_global_friend() {
 		// Nonce check
-		//if ( ! wp_verify_nonce( $_REQUEST[ 'nonce' ], $this->nonce_field ) ) {
+		//if ( ! wp_verify_nonce( $_REQUEST['nonce'], $this->nonce_field ) ) {
 		//	wp_die( $this->nonce_fail_message );
 		//}
 
@@ -332,20 +343,22 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 	}
 
 	/**
+	 * Admin Ajax for adding users.
+	 *
 	 * @since 2.0.0
 	 */
 	function action_ajax_bpaf_add_global_friend() {
 		// Nonce check
-		//if ( ! wp_verify_nonce( $_REQUEST[ 'nonce' ], $this->nonce_field ) ) {
+		//if ( ! wp_verify_nonce( $_REQUEST['nonce'], $this->nonce_field ) ) {
 		//	wp_die( $this->nonce_fail_message );
 		//}
 
-		if( ! isset( $_REQUEST[ 'username' ] ) && empty( $_REQUEST[ 'username' ] ) ) {
+		if( ! isset( $_REQUEST['username'] ) && empty( $_REQUEST['username'] ) ) {
 		 	die;
 		}
 
 		// Add Global Friend status
-		$user = get_user_by( 'login', $_REQUEST[ 'username' ] );
+		$user = get_user_by( 'login', $_REQUEST['username'] );
 		if( isset( $user->data->ID ) ) {
 			// Update the user and related friendships
 			update_usermeta( $user->data->ID, s8d_BuddyPress_Automatic_Friends_Core::METAKEY, true );
@@ -360,6 +373,8 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 	}
 
 	/**
+	 * Render the global friends table.
+	 *
 	 * @since 2.0.0
 	 */
 	function render_global_friend_table_row( $friend_user_id, $i = '' ) {
@@ -393,21 +408,23 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 	}
 
 	/**
+	 * Admin Ajax for removing users.
+	 *
 	 * @since 2.0.0
 	 */
 	function action_ajax_bpaf_delete_global_friend() {
 		// Nonce check
-		//if ( ! wp_verify_nonce( $_REQUEST[ 'nonce' ], $this->nonce_field ) ) {
+		//if ( ! wp_verify_nonce( $_REQUEST['nonce'], $this->nonce_field ) ) {
 		//	wp_die( $this->nonce_fail_message );
 		//}
 
-		if( ! isset( $_REQUEST[ 'ID' ] ) && empty( $_REQUEST[ 'ID' ] ) ) {
+		if( ! isset( $_REQUEST['ID'] ) && empty( $_REQUEST['ID'] ) ) {
 		 	die;
 		}
 
 		// Remove Global Friend status
-		update_usermeta( $_REQUEST[ 'ID' ], s8d_BuddyPress_Automatic_Friends_Core::METAKEY, false );
-		s8d_bpaf_destroy_friendships( $_REQUEST[ 'ID' ] );
+		update_usermeta( $_REQUEST['ID'], s8d_BuddyPress_Automatic_Friends_Core::METAKEY, false );
+		s8d_bpaf_destroy_friendships( $_REQUEST['ID'] );
 
 		// Return the number of friends remaning
 		echo $global_friends_remaining = count( s8d_bpaf_get_global_friends() );

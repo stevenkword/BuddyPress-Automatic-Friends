@@ -149,7 +149,7 @@ function s8d_bpaf_create_friendships( $initiator_user_id ) {
 
 	/* Get the friend users id(s) */
 	//$options = get_option( s8d_BuddyPress_Automatic_Friends_Core::OPTION );
-	//$global_friend_user_ids = $options[ 's8d_bpaf_user_ids' ];
+	//$global_friend_user_ids = $options['s8d_bpaf_user_ids'];
 
 	$global_friend_user_ids = s8d_bpaf_get_global_friends();
 
