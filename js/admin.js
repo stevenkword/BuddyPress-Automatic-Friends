@@ -48,7 +48,7 @@ jQuery( document ).ready( function( $ ) {
 	});
 
 	// Remove a Global Friend
-	$('.trash').click( function(e) {
+	$('#global-friends-form').on( 'click', '.trash', function(e) {
 
 		e.preventDefault();
 
