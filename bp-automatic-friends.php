@@ -70,7 +70,7 @@ class BuddyPress_Automatic_Friends_Core {
 	 */
 	function setup() {
 		$plugin_dir = basename( dirname( __FILE__ ) );
-		load_plugin_textdomain( self::TEXT_DOMAIN, false, $plugin_dir );
+		load_plugin_textdomain( self::TEXT_DOMAIN, false, $plugin_dir . '/language/' );
 
 		add_action( 'bp_loaded', array( $this, 'action_bp_loaded' ) );
 	}
@@ -87,7 +87,7 @@ class BuddyPress_Automatic_Friends_Core {
 
 		/* Load the admin */
 		if ( is_admin() ){
-			require_once( dirname(__FILE__) . '/includes/admin.php' );
+			require_once( dirname(__FILE__) . '/inc/admin.php' );
 		}
 
 		/* Do this the first time a new user logs in */
