@@ -76,7 +76,6 @@ jQuery( document ).ready( function( $ ) {
 			success: function( response ) {
 				$('.spinner').hide();
 				$parentTableRow.remove();
-				alert( response );
 				if ( 1 >= response ) {
 					$parentTable.append('<tr class="bpaf-empty-table-row"><td colspan="3">No Global Friends found.</td></tr>');
 				}

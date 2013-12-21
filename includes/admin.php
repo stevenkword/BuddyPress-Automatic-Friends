@@ -14,7 +14,7 @@
 /**
  * @since 2.0.0
  */
-class s8d_BuddyPress_Automatic_Friends_Admin {
+class BuddyPress_Automatic_Friends_Admin {
 
 	const SCRIPTS_VERSION = '2';
 
@@ -90,7 +90,7 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 	function action_admin_init() {
 
 		/* Register Settings */
-		register_setting( s8d_BuddyPress_Automatic_Friends_Core::OPTION, s8d_BuddyPress_Automatic_Friends_Core::OPTION, array( $this, 's8d_bpaf_settings_validate_options' ) );
+		register_setting( BuddyPress_Automatic_Friends_Core::OPTION, BuddyPress_Automatic_Friends_Core::OPTION, array( $this, 's8d_bpaf_settings_validate_options' ) );
 
 		/* Settings - General Section */
 		add_settings_section (
@@ -154,14 +154,14 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		</div>
 		<?php
 
-		$options = get_option( s8d_BuddyPress_Automatic_Friends_Core::OPTION );
+		$options = get_option( BuddyPress_Automatic_Friends_Core::OPTION );
 		$s8d_bpaf_user_ids = $options['s8d_bpaf_user_ids'];
 		$friend_user_ids = explode(',', $s8d_bpaf_user_ids);
 
-		$friend_user_ids = $global_friend_user_ids = s8d_bpaf_get_global_friends();
+		$friend_user_ids = $global_friend_user_ids = bpaf_get_global_friends();
 		?>
 		<form id="global-friends-form">
-		<?php wp_nonce_field( s8d_BuddyPress_Automatic_Friends_Core::NONCE, s8d_BuddyPress_Automatic_Friends_Core::NONCE, false ); ?>
+		<?php wp_nonce_field( BuddyPress_Automatic_Friends_Core::NONCE, BuddyPress_Automatic_Friends_Core::NONCE, false ); ?>
 		<table class="wp-list-table widefat fixed users" cellspacing="0" style="clear:left;">
 			<thead>
 				<tr>
@@ -229,7 +229,6 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 						</div>
 						<div id="bpaf_display_contact" class="postbox ">
 							<h3 class="hndle"><span>Contact BP Automatic Friends</span></h3>
-							<!--<a href="https://github.com/stevenkword/BuddyPress-Automatic-Friends" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>-->
 							<div class="inside">
 								<ul class="bpaf-contact-links">
 									<li><a class="link-bpaf-forum" href="http://wordpress.org/support/plugin/bp-automatic-friends" target="_blank">Support Forums</a></li>
@@ -265,7 +264,7 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 	 * @return null
 	 */
 	function s8d_bpaf_settings_user_ids_input() {
-		$options = get_option( s8d_BuddyPress_Automatic_Friends_Core::OPTION );
+		$options = get_option( BuddyPress_Automatic_Friends_Core::OPTION );
 		$user_ids = $options['s8d_bpaf_user_ids'];
 
 		echo "<p>";
@@ -280,7 +279,7 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 	 * @return null
 	 */
 	function action_personal_options( $user ) {
-		$meta_value = get_user_meta( $user->ID, s8d_BuddyPress_Automatic_Friends_Core::METAKEY, true );
+		$meta_value = get_user_meta( $user->ID, BuddyPress_Automatic_Friends_Core::METAKEY, true );
 		?>
 			</table>
 			<table class="form-table">
@@ -308,7 +307,7 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		//	return false;
 
 		$meta_value = isset( $_REQUEST['global-friend'] ) ? true : false;
-		update_usermeta( $user_id, s8d_BuddyPress_Automatic_Friends_Core::METAKEY, $meta_value );
+		update_usermeta( $user_id, BuddyPress_Automatic_Friends_Core::METAKEY, $meta_value );
 
 		// Update the friend counts
 		BP_Friends_Friendship::total_friend_count( $user_id );
@@ -325,11 +324,13 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		//	wp_die( $this->nonce_fail_message );
 		//}
 
-		$global_friend_user_ids = s8d_bpaf_get_global_friends();
+		global $bp;
+
+		$global_friend_user_ids = bpaf_get_global_friends();
 
 		$users = get_users( array(
 			//'fields' => 'user_nicename' // This is returning numeric, wtf?
-			'exclude' => $global_friend_user_ids
+			'exclude' => array_merge( $global_friend_user_ids, array( $bp->loggedin_user->id ) )
 		 ) );
 
 		$user_ids = array();
@@ -361,10 +362,10 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		$user = get_user_by( 'login', $_REQUEST['username'] );
 		if( isset( $user->data->ID ) ) {
 			// Update the user and related friendships
-			update_usermeta( $user->data->ID, s8d_BuddyPress_Automatic_Friends_Core::METAKEY, true );
+			update_usermeta( $user->data->ID, BuddyPress_Automatic_Friends_Core::METAKEY, true );
 
 			// This is wrong MMMMMKay! This is looking for a newly registred user, not a global friend
-			s8d_bpaf_create_friendships( $user->data->ID );
+			bpaf_create_friendships( $user->data->ID );
 
 			// Add a new row to the table
 			$this->render_global_friend_table_row( $user->data->ID );
@@ -379,7 +380,7 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 	 */
 	function render_global_friend_table_row( $friend_user_id, $i = '' ) {
 		if( ! isset( $i ) || '' == $i ) {
-			$i = count( s8d_bpaf_get_global_friends() );
+			$i = count( bpaf_get_global_friends() );
 			echo $i;
 		}
 		$friend_userdata = get_userdata( $friend_user_id );
@@ -423,13 +424,13 @@ class s8d_BuddyPress_Automatic_Friends_Admin {
 		}
 
 		// Remove Global Friend status
-		update_usermeta( $_REQUEST['ID'], s8d_BuddyPress_Automatic_Friends_Core::METAKEY, false );
-		s8d_bpaf_destroy_friendships( $_REQUEST['ID'] );
+		update_usermeta( $_REQUEST['ID'], BuddyPress_Automatic_Friends_Core::METAKEY, false );
+		bpaf_destroy_friendships( $_REQUEST['ID'] );
 
 		// Return the number of friends remaning
-		echo $global_friends_remaining = count( s8d_bpaf_get_global_friends() );
+		echo $global_friends_remaining = count( bpaf_get_global_friends() );
 		die;
 	}
 
 } // Class
-s8d_BuddyPress_Automatic_Friends_Admin::instance();
+BuddyPress_Automatic_Friends_Admin::instance();

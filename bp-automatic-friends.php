@@ -29,7 +29,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-class s8d_BuddyPress_Automatic_Friends_Core {
+class BuddyPress_Automatic_Friends_Core {
 
 	const REVISION = '20131214';
 	const NONCE    = 's8d_bpaf_nonce';
@@ -86,7 +86,7 @@ class s8d_BuddyPress_Automatic_Friends_Core {
 		}
 
 		/* Do this the first time a new user logs in */
-		add_action( 'wp', array( $this, 's8d_bpaf_first_login' ) );
+		add_action( 'wp', array( $this, 'first_login' ) );
 	}
 
 	/**
@@ -98,7 +98,7 @@ class s8d_BuddyPress_Automatic_Friends_Core {
 	 * and if get_user_meta( $bp->loggedin_user->id, 'last_activity' ) is false.
 	 * http://buddypress.trac.wordpress.org/ticket/3003
 	 */
-	function s8d_bpaf_first_login(){
+	function first_login() {
 
 		if( ! is_user_logged_in() )
 			return;
@@ -109,93 +109,127 @@ class s8d_BuddyPress_Automatic_Friends_Core {
 
 	// This needs to be re-added after debugging
 	//	if( ! isset( $last_login ) || empty( $last_login ) )
-			s8d_bpaf_create_friendships( $bp->loggedin_user->id );
+			$this->create_friendships( $bp->loggedin_user->id );
 
 	}
 
-}
-s8d_BuddyPress_Automatic_Friends_Core::instance();
+	/**
+	 * Get Global Friends
+	 *
+	 * @return array|bool
+	 */
+	function get_global_friends() {
+		global $bp;
 
-// @return array|bool
-function s8d_bpaf_get_global_friends() {
-	// The Query
-	$user_query = new WP_User_Query( array(
-		'meta_key' => s8d_BuddyPress_Automatic_Friends_Core::METAKEY,
-		'meta_value' => true,
-		'fields' => 'ID'
-	) );
+		// The Query
+		$user_query = new WP_User_Query( array(
+			'meta_key' => BuddyPress_Automatic_Friends_Core::METAKEY,
+			'meta_value' => true,
+			'fields' => 'ID'
+		) );
 
-	if ( ! empty( $user_query->results ) ) {
-		return $user_query->results;
-	} else {
-		return false;
+		if ( ! empty( $user_query->results ) ) {
+			return $user_query->results;
+		} else {
+			return false;
+		}
 	}
-}
 
-/**
- * Create friendships automatically
- * When a initiator user registers for the blog, create initiator friendship with the specified user(s) and autoaccept those friendhips.
- * @global bp
- * @param initiator_user_id
- * @uses get_userdata, get_option, explode, friends_add_friend, get_friend_user_ids, total_friend_count
- * @return null
- */
-function s8d_bpaf_create_friendships( $initiator_user_id ) {
+	/**
+	 * Create friendships automatically
+	 *
+	 * When a initiator user registers for the blog, create initiator friendship with the specified user(s) and autoaccept those friendhips.
+	 * @global bp
+	 * @param initiator_user_id
+	 * @uses get_userdata, get_option, explode, friends_add_friend, get_friend_user_ids, total_friend_count
+	 * @return null
+	 */
+	function create_friendships( $initiator_user_id ) {
 
-	global $bp;
+		global $bp;
 
-	/* Get the user data for the initiatorly registered user. */
-	$initiator_user_info = get_userdata( $initiator_user_id );
+		/* Get the user data for the initiatorly registered user. */
+		$initiator_user_info = get_userdata( $initiator_user_id );
 
-	/* Get the friend users id(s) */
-	//$options = get_option( s8d_BuddyPress_Automatic_Friends_Core::OPTION );
-	//$global_friend_user_ids = $options['s8d_bpaf_user_ids'];
+		/* Get the friend users id(s) */
+		//$options = get_option( BuddyPress_Automatic_Friends_Core::OPTION );
+		//$global_friend_user_ids = $options['s8d_bpaf_user_ids'];
 
-	$global_friend_user_ids = s8d_bpaf_get_global_friends();
+		$global_friend_user_ids = self::get_global_friends();
 
-	/* Check to see if the admin options are set*/
-	if ( isset( $global_friend_user_ids ) && ! empty( $global_friend_user_ids ) ){
+		/* Check to see if the admin options are set*/
+		if ( isset( $global_friend_user_ids ) && ! empty( $global_friend_user_ids ) ){
 
-		// @legacy
-		//$friend_user_ids = explode( ',', $global_friend_user_ids );
+			// @legacy
+			//$friend_user_ids = explode( ',', $global_friend_user_ids );
 
-		$friend_user_ids = $global_friend_user_ids;
+			$friend_user_ids = $global_friend_user_ids;
 
-		foreach ( $friend_user_ids as $friend_user_id ){
-			// If a friendship between these people already exists, we don't want to do this again
-			if( $initiator_user_id != $friend_user_id && 'not_friends' == BP_Friends_Friendship::check_is_friend( $initiator_user_id, $friend_user_id ) ) {
-				/* Request the friendship */
-				friends_add_friend( $initiator_user_id, $friend_user_id, $force_accept = true );
-				s8d_bpaf_update_friendship_counts( $initiator_user_id );
+			foreach ( $friend_user_ids as $friend_user_id ){
+				// If a friendship between these people already exists, we don't want to do this again
+				if( $initiator_user_id != $friend_user_id && 'not_friends' == BP_Friends_Friendship::check_is_friend( $initiator_user_id, $friend_user_id ) ) {
+					/* Request the friendship */
+					friends_add_friend( $initiator_user_id, $friend_user_id, $force_accept = true );
+					self::update_friendship_counts( $initiator_user_id );
+				}
 			}
+
 		}
 
 	}
-	return;
-}
 
-/**
- * Destroy Friendships
- *
- * @global bp
- * @param initiator_user_id
- * @uses get_userdata, get_option, explode, friends_add_friend, get_friend_user_ids, total_friend_count
- * @return null
- */
-function s8d_bpaf_destroy_friendships( $initiator_user_id ) {
-	BP_Friends_Friendship::delete_all_for_user( $initiator_user_id );
-	s8d_bpaf_update_friendship_counts( $initiator_user_id );
-}
-
-function s8d_bpaf_update_friendship_counts( $initiator_user_id ) {
-	/* Get friends of $user_id */
-	$friend_ids = BP_Friends_Friendship::get_friend_user_ids( $initiator_user_id );
-
-	/* Loop through the initiator's friends and update their friend counts */
-	foreach ( (array) $friend_ids as $friend_id ) {
-		BP_Friends_Friendship::total_friend_count( $friend_id );
+	/**
+	 * Destroy Friendships
+	 *
+	 * @global bp
+	 * @param initiator_user_id
+	 * @uses get_userdata, get_option, explode, friends_add_friend, get_friend_user_ids, total_friend_count
+	 * @return null
+	 */
+	function destroy_friendships( $initiator_user_id ) {
+		BP_Friends_Friendship::delete_all_for_user( $initiator_user_id );
+		self::update_friendship_counts( $initiator_user_id );
 	}
 
-	/* Update initiator friend counts */
-	BP_Friends_Friendship::total_friend_count( $initiator_user_id );
+	/**
+	 * Update Friendship Counts
+	 *
+	 * @return null
+	 */
+	function update_friendship_counts( $initiator_user_id ) {
+		/* Get friends of $user_id */
+		$friend_ids = BP_Friends_Friendship::get_friend_user_ids( $initiator_user_id );
+
+		/* Loop through the initiator's friends and update their friend counts */
+		foreach ( (array) $friend_ids as $friend_id ) {
+			BP_Friends_Friendship::total_friend_count( $friend_id );
+		}
+
+		/* Update initiator friend counts */
+		BP_Friends_Friendship::total_friend_count( $initiator_user_id );
+	}
+
+}
+BuddyPress_Automatic_Friends_Core::instance();
+
+/* Wrappers */
+if ( ! function_exists( 'bpaf_get_global_friends' ) ) {
+	function bpaf_get_global_friends() {
+		return BuddyPress_Automatic_Friends_Core::get_global_friends();
+	}
+}
+if ( ! function_exists( 'bpaf_create_friendships' ) ) {
+	function bpaf_create_friendships( $initiator_user_id ) {
+		BuddyPress_Automatic_Friends_Core::create_friendships( $initiator_user_id );
+	}
+}
+if ( ! function_exists( 'bpaf_destroy_friendships' ) ) {
+	function bpaf_destroy_friendships( $initiator_user_id ) {
+		BuddyPress_Automatic_Friends_Core::destroy_friendships( $initiator_user_id );
+	}
+}
+if ( ! function_exists( 'bpaf_update_friendship_counts' ) ) {
+	function bpaf_update_friendship_counts( $initiator_user_id ) {
+		BuddyPress_Automatic_Friends_Core::update_friendship_counts( $initiator_user_id );
+	}
 }
