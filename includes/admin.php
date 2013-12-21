@@ -145,11 +145,11 @@ class BuddyPress_Automatic_Friends_Admin {
 	 */
 	function s8d_bpaf_display_auto_friend_users() {
 		?>
-		<p>When new user accounts are registered, friendships between the new user and each of the following global friends will be created automatically.</p>
-		<h3 style="float: left; margin:1em 0;padding:0; line-height:2em;">Global Friends</h3>
+		<p><?php _e( 'When new user accounts are registered, friendships between the new user and each of the following global friends will be created automatically.', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></p>
+		<h3 style="float: left; margin:1em 0;padding:0; line-height:2em;"><?php _e( 'Global Friends', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></h3>
 		<div style="padding: 1em 0;">
 			<input type="text" name="add-global-friend-field" id="add-global-friend-field" style="margin-left: 1em; color: #aaa;"value="Search by Username" onfocus="if (this.value == 'Search by Username') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search by Username';}" size="40" maxlength="128">
-			<button id="add-global-friend-button" class="button" disabled="disabled">Add User</button>
+			<button id="add-global-friend-button" class="button" disabled="disabled"><?php _e( 'Add User', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></button>
 			<span class="spinner"></span>
 		</div>
 		<?php
@@ -165,9 +165,9 @@ class BuddyPress_Automatic_Friends_Admin {
 		<table class="wp-list-table widefat fixed users" cellspacing="0" style="clear:left;">
 			<thead>
 				<tr>
-				  <th scope="col" id="username" class="manage-column column-username sortable desc" style=""><a><span> Username</span></a></th>
-				  <th scope="col" id="name" class="manage-column column-name sortable desc" style=""><a><span>Name</span></a></th>
-				  <th scope="col" id="friends" class="manage-column column-friends sortable desc" style=""><a><span>Friends</span></a></th>
+				  <th scope="col" id="username" class="manage-column column-username sortable desc" style=""><a><span><?php _e( 'Username', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></span></a></th>
+				  <th scope="col" id="name" class="manage-column column-name sortable desc" style=""><a><span><?php _e( 'Name', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></span></a></th>
+				  <th scope="col" id="friends" class="manage-column column-friends sortable desc" style=""><a><span><?php _e( 'Friends', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></span></a></th>
 				</tr>
 			</thead>
 			<?php
@@ -188,9 +188,9 @@ class BuddyPress_Automatic_Friends_Admin {
 			?>
 			<tfoot>
 				<tr>
-				  <th scope="col" id="username" class="manage-column column-username sortable desc" style=""><a><span> Username</span></a></th>
-				  <th scope="col" id="name" class="manage-column column-name sortable desc" style=""><a><span>Name</span></a></th>
-				  <th scope="col" id="friends" class="manage-column column-friends sortable desc" style=""><a><span>Friends</span></a></th>
+				  <th scope="col" id="username" class="manage-column column-username sortable desc" style=""><a><span><?php _e( 'Username', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></span></a></th>
+				  <th scope="col" id="name" class="manage-column column-name sortable desc" style=""><a><span><?php _e( 'Name', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></span></a></th>
+				  <th scope="col" id="friends" class="manage-column column-friends sortable desc" style=""><a><span><?php _e( 'Friends', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></span></a></th>
 				</tr>
 			</tfoot>
 		</table>
@@ -208,14 +208,14 @@ class BuddyPress_Automatic_Friends_Admin {
 		?>
 		<div class="wrap">
 			<?php //screen_icon(); ?>
-			<h2>BuddyPress Automatic Friends</h2>
+			<h2><?php _e( 'BuddyPress Automatic Friends', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></h2>
 			<div id="poststuff" class="metabox-holder has-right-sidebar">
 				<div class="inner-sidebar" id="side-info-column">
 					<div id="side-sortables" class="meta-box-sortables ui-sortable">
 						<div id="bpaf_display_optin" class="postbox ">
-							<h3 class="hndle"><span>Help Improve BP Automatic Friends</span></h3>
+							<h3 class="hndle"><span><?php _e( 'Help Improve BP Automatic Friends', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></span></h3>
 							<div class="inside">
-								<p>We would really appreciate your input to help us continue to improve the product.</p>
+								<p><?php _e( 'We would really appreciate your input to help us continue to improve the product.', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></p>
 								<p>Find us on <a href="https://github.com/stevenkword/BuddyPress-Automatic-Friends" target="_blank">GitHub</a> or donate to the project using the button below.</p>
 								<div style="width: 100%; text-align: center;">
 									<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
@@ -228,13 +228,13 @@ class BuddyPress_Automatic_Friends_Admin {
 							</div>
 						</div>
 						<div id="bpaf_display_contact" class="postbox ">
-							<h3 class="hndle"><span>Contact BP Automatic Friends</span></h3>
+							<h3 class="hndle"><span><?php _e( 'Contact BP Automatic Friends', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></span></h3>
 							<div class="inside">
 								<ul class="bpaf-contact-links">
-									<li><a class="link-bpaf-forum" href="http://wordpress.org/support/plugin/bp-automatic-friends" target="_blank">Support Forums</a></li>
-									<li><a class="link-bpaf-web" href="http://stevenword.com/plugins/bp-automatic-friends/" target="_blank">BP Automatic Friends on the Web</a></li>
-									<li><a class="link-bpaf-github" href="https://github.com/stevenkword/BuddyPress-Automatic-Friends" target="_blank">GitHub Project</a></li>
-									<li><a class="link-bpaf-review" href="http://wordpress.org/support/view/plugin-reviews/bp-automatic-friends" target="_blank">Review on WordPress.org</a></li>
+									<li><a class="link-bpaf-forum" href="http://wordpress.org/support/plugin/bp-automatic-friends" target="_blank"><?php _e( 'Support Forums', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></a></li>
+									<li><a class="link-bpaf-web" href="http://stevenword.com/plugins/bp-automatic-friends/" target="_blank"><?php _e( 'BP Automatic Friends on the Web', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></a></li>
+									<li><a class="link-bpaf-github" href="https://github.com/stevenkword/BuddyPress-Automatic-Friends" target="_blank"><?php _e( 'GitHub Project', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></a></li>
+									<li><a class="link-bpaf-review" href="http://wordpress.org/support/view/plugin-reviews/bp-automatic-friends" target="_blank"><?php _e( 'Review on WordPress.org', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></a></li>
 								</ul>
 							</div>
 						</div>
@@ -283,13 +283,13 @@ class BuddyPress_Automatic_Friends_Admin {
 		?>
 			</table>
 			<table class="form-table">
-			<h3>BuddyPress Automatic Friends</h3>
+			<h3><?php _e( 'BuddyPress Automatic Friends', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></h3>
 			<tr>
-				<th scope="row">Global Friend</th>
+				<th scope="row"><?php _e( 'Global Friend', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></th>
 				<td>
 					<label for="global-friend">
 						<input type="checkbox" id="global-friend" name="global-friend" <?php checked( $meta_value ); ?> />
-						<span> Automatically create friendships with all new users</span>
+						<span> <?php _e( 'Automatically create friendships with all new users', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></span>
 					</label>
 				</td>
 			</tr>

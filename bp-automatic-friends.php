@@ -3,6 +3,7 @@
 Plugin Name: BuddyPress Automatic Friends
 Plugin URI: http://www.stevenword.com/bp-automatic-friends/
 Description: Automatically create and accept friendships for specified users upon new user registration. * Requires BuddyPress
+Text Domain: bp-automatic-friends
 Version: 2.0.0
 Author: Steven K. Word
 Author URI: http://stevenword.com/
@@ -31,10 +32,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 class BuddyPress_Automatic_Friends_Core {
 
-	const REVISION = '20131214';
+	const REVISION = '20131221';
 	const NONCE    = 's8d_bpaf_nonce';
 	const METAKEY  = 's8d_bpaf_global_friend';
 	const OPTION   = 's8d_bpaf_options';
+
+	const TEXT_DOMAIN = 'bp-automatic-friends';
 
 	/* Define and register singleton */
 	private static $instance = false;
@@ -67,6 +70,9 @@ class BuddyPress_Automatic_Friends_Core {
 	 * @since 2.0.0
 	 */
 	function setup() {
+		$plugin_dir = basename( dirname( __FILE__ ) );
+		load_plugin_textdomain( self::TEXT_DOMAIN, false, $plugin_dir );
+
 		add_action( 'bp_loaded', array( $this, 'action_bp_loaded' ) );
 	}
 
