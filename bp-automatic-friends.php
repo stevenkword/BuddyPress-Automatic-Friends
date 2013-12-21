@@ -32,11 +32,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 class BuddyPress_Automatic_Friends_Core {
 
-	const REVISION = '20131221';
-	const NONCE    = 's8d_bpaf_nonce';
-	const METAKEY  = 's8d_bpaf_global_friend';
-	const OPTION   = 's8d_bpaf_options';
-
+	const REVISION    = '20131221';
+	const NONCE       = 's8d_bpaf_nonce';
+	const METAKEY     = 's8d_bpaf_global_friend';
+	const OPTION      = 's8d_bpaf_options';
 	const TEXT_DOMAIN = 'bp-automatic-friends';
 
 	/* Define and register singleton */
@@ -113,8 +112,8 @@ class BuddyPress_Automatic_Friends_Core {
 
 		$last_login = get_user_meta( $bp->loggedin_user->id, 'last_activity', true );
 
-	// This needs to be re-added after debugging
-	//	if( ! isset( $last_login ) || empty( $last_login ) )
+		// This needs to be re-added after debugging
+		if( ! isset( $last_login ) || empty( $last_login ) )
 			$this->create_friendships( $bp->loggedin_user->id );
 
 	}

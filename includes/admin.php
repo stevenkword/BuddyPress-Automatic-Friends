@@ -92,21 +92,7 @@ class BuddyPress_Automatic_Friends_Admin {
 		/* Register Settings */
 		register_setting( BuddyPress_Automatic_Friends_Core::OPTION, BuddyPress_Automatic_Friends_Core::OPTION, array( $this, 's8d_bpaf_settings_validate_options' ) );
 
-		/* Settings - General Section */
-		add_settings_section (
-			's8d_bpaf_settings_general',
-			'General Options',
-			array( $this, 's8d_bpaf_settings_text' ),
-			's8d_bpaf_settings_page'
-		);
 
-		add_settings_field (
-			's8d_bpaf_user_ids',
-			'User ID(s)',
-			array( $this, 's8d_bpaf_settings_user_ids_input' ),
-			's8d_bpaf_settings_page',
-			's8d_bpaf_settings_general'
-		);
 	}
 
 
@@ -148,7 +134,8 @@ class BuddyPress_Automatic_Friends_Admin {
 		<p><?php _e( 'When new user accounts are registered, friendships between the new user and each of the following global friends will be created automatically.', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></p>
 		<h3 style="float: left; margin:1em 0;padding:0; line-height:2em;"><?php _e( 'Global Friends', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></h3>
 		<div style="padding: 1em 0;">
-			<input type="text" name="add-global-friend-field" id="add-global-friend-field" style="margin-left: 1em; color: #aaa;"value="Search by Username" onfocus="if (this.value == 'Search by Username') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search by Username';}" size="40" maxlength="128">
+			<?php $search_text = __('Search by Username', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?>
+			<input type="text" name="add-global-friend-field" id="add-global-friend-field" style="margin-left: 1em; color: #aaa;"value="<?php echo $search_text;?>" onfocus="if (this.value == '<?php echo $search_text;?>') {this.value = '';}" onblur="if (this.value == '') {this.value = '<?php echo $search_text;?>';}" size="40" maxlength="128">
 			<button id="add-global-friend-button" class="button" disabled="disabled"><?php _e( 'Add User', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></button>
 			<span class="spinner"></span>
 		</div>
@@ -216,7 +203,9 @@ class BuddyPress_Automatic_Friends_Admin {
 							<h3 class="hndle"><span><?php _e( 'Help Improve BP Automatic Friends', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></span></h3>
 							<div class="inside">
 								<p><?php _e( 'We would really appreciate your input to help us continue to improve the product.', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></p>
-								<p>Find us on <a href="https://github.com/stevenkword/BuddyPress-Automatic-Friends" target="_blank">GitHub</a> or donate to the project using the button below.</p>
+								<p>
+								<?php printf( __( 'Find us on %1$s or donate to the project using the button below.', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN ), '<a href="https://github.com/stevenkword/BuddyPress-Automatic-Friends" target="_blank">GitHub</a>' ); ?>
+								</p>
 								<div style="width: 100%; text-align: center;">
 									<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
 										<input type="hidden" name="cmd" value="_s-xclick">
@@ -246,31 +235,6 @@ class BuddyPress_Automatic_Friends_Admin {
 			</div>
 		</div><!--/.wrap-->
 		<?php
-	}
-
-	/**
-	 * Instructions.
-	 *
-	 * @return null
-	 */
-	function s8d_bpaf_settings_text() {
-		echo "<p>Enter the user id(s) you would like to autofriend upon new user registration.</p>";
-	}
-
-	/**
-	 * Form Inputs.
-	 *
-	 * @uses get_option
-	 * @return null
-	 */
-	function s8d_bpaf_settings_user_ids_input() {
-		$options = get_option( BuddyPress_Automatic_Friends_Core::OPTION );
-		$user_ids = $options['s8d_bpaf_user_ids'];
-
-		echo "<p>";
-		echo "<input class='regular-text' id='s8d_bpaf_user_ids' name='s8d_bpaf_options[s8d_bpaf_user_ids]' type='text' value='$user_ids' />";
-		echo "<span class='description'>* comma separated</span>";
-		echo "</p>";
 	}
 
 	/**
@@ -392,8 +356,8 @@ class BuddyPress_Automatic_Friends_Admin {
 			<strong><?php echo $friend_userdata->user_login;?></strong>
 			<br>
 			<div class="row-actions">
-				<span class="edit"><a href="<?php echo get_edit_user_link( $friend_user_id ); ?>" title="Edit this item">Edit</a> | </span>
-				<span id="remove-<?php echo $friend_userdata->user_login;?>" class="trash"><a class="submitdelete" title="Move this item to the Trash" href="javascript:void(0);">Remove</a></span>
+				<span class="edit"><a href="<?php echo get_edit_user_link( $friend_user_id ); ?>" title="Edit this item"><?php _e( 'Edit', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></a> | </span>
+				<span id="remove-<?php echo $friend_userdata->user_login;?>" class="trash"><a class="submitdelete" title="Move this item to the Trash" href="javascript:void(0);"><?php _e( 'Remove', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></a></span>
 			</div>
 		  </td>
 
