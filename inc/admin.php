@@ -88,7 +88,7 @@ class BPAF_Admin {
 	function action_admin_init() {
 
 		/* Register Settings */
-		register_setting( BPAF_Core::OPTION, BPAF_Core::OPTION, array( $this, 's8d_bpaf_settings_validate_options' ) );
+		register_setting( BPAF_Core::LEGACY_OPTION, BPAF_Core::LEGACY_OPTION, array( $this, 's8d_bpaf_settings_validate_options' ) );
 
 
 	}
@@ -139,9 +139,11 @@ class BPAF_Admin {
 		</div>
 		<?php
 		// Legacy Support
-		$options = get_option( BPAF_Core::OPTION );
-		$s8d_bpaf_user_ids = $options['s8d_bpaf_user_ids'];
-		$friend_user_ids = explode(',', $s8d_bpaf_user_ids);
+		$options = get_option( BPAF_Core::LEGACY_OPTION );
+		if( isset( $options[ BPAF_Core::LEGACY_OPTION . '_ids'] ) ) {
+			$s8d_bpaf_user_ids = $options[ BPAF_Core::LEGACY_OPTION . '_ids'];
+			$friend_user_ids = explode(',', $s8d_bpaf_user_ids);
+		}
 
 		// Modern
 		$friend_user_ids = $global_friend_user_ids = bpaf_get_global_friends();

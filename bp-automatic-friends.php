@@ -42,9 +42,9 @@ class BPAF_Core {
 
 	const VERSION        = '2.0.0';
 	const REVISION       = '20131222';
-	const METAKEY        = 's8d_bpaf_global_friend';
-	const OPTION         = 's8d_bpaf_options';
-	const NONCE          = 's8d_bpaf_nonce';
+	const METAKEY        = 'bpaf_global_friend';
+	const LEGACY_OPTION  = 'skw_bpaf_options';
+	const NONCE          = 'bpaf_nonce';
 	const NONCE_FAIL_MSG = 'Cheatin&#8217; huh?';
 	const TEXT_DOMAIN    = 'bp-automatic-friends';
 
@@ -168,7 +168,7 @@ class BPAF_Core {
 		$initiator_user_info = get_userdata( $initiator_user_id );
 
 		/* Get the friend users id(s) */
-		//$options = get_option( BPAF_Core::OPTION );
+		//$options = get_option( BPAF_Core::LEGACY_OPTION );
 		//$global_friend_user_ids = $options['s8d_bpaf_user_ids'];
 
 		$global_friend_user_ids = self::get_global_friends();

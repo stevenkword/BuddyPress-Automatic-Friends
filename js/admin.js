@@ -1,7 +1,7 @@
 jQuery( document ).ready( function( $ ) {
 	var $addGlobalFriendField = $('#add-global-friend-field');
 	var $addGlobalFriendButton = $('#add-global-friend-button');
-	var nonce = $('#s8d_bpaf_nonce').val();
+	var nonce = $('#bpaf_nonce').val();
 	var params = { 'nonce':nonce };
 
 console.log(params);
@@ -39,7 +39,7 @@ console.log(params);
 	$addGlobalFriendButton.click( function(e) {
 		var $self = $(this);
 		var $parentTable = $('.wp-list-table'); // TODO: way too general
-		var nonce = $('#s8d_bpaf_nonce').val();
+		var nonce = $('#bpaf_nonce').val();
 		var params = { 'username':$addGlobalFriendField.val(), 'nonce':nonce };
 
 		// Send the contents of the existing post
@@ -75,7 +75,7 @@ console.log(params);
 		var $parentTable = $('.wp-list-table'); // TODO: way too general
 		var $parentTableRow = $self.parents('tr');
 		var userID = $parentTableRow.find('.bpaf-user-id').val();
-		var nonce = $('#s8d_bpaf_nonce').val();
+		var nonce = $('#bpaf_nonce').val();
 
 		var params = { 'ID':userID, 'nonce':nonce };
 

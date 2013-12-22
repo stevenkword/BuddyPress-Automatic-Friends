@@ -76,6 +76,11 @@ class BPAF_Update {
 			// Perform updates here if necessary
 			if( $this->version < '2.0.0' ) {
 				//echo 'you need to update to 2.0, yo';
+				//
+
+				/* Get the friend users id(s) */
+				$options = get_option( BPAF_Core::LEGACY_OPTION );
+				$global_friend_user_ids = $options['skw_bpaf_user_ids'];
 			}
 
 			// Update the version information in the database
