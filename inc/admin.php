@@ -12,9 +12,9 @@
  */
 
 /**
- * @since 2.0.0
+ * BuddPress Automatic Friends Admin
  */
-class BuddyPress_Automatic_Friends_Admin {
+class BPAF_Admin {
 
 	const SCRIPTS_VERSION = '2';
 
@@ -90,7 +90,7 @@ class BuddyPress_Automatic_Friends_Admin {
 	function action_admin_init() {
 
 		/* Register Settings */
-		register_setting( BuddyPress_Automatic_Friends_Core::OPTION, BuddyPress_Automatic_Friends_Core::OPTION, array( $this, 's8d_bpaf_settings_validate_options' ) );
+		register_setting( BPAF_Core::OPTION, BPAF_Core::OPTION, array( $this, 's8d_bpaf_settings_validate_options' ) );
 
 
 	}
@@ -120,7 +120,7 @@ class BuddyPress_Automatic_Friends_Admin {
 		if ( ! is_super_admin() )
 			return false;
 
-		add_users_page( __( 'BuddyPress Automatic Friends', 's8d-bpaf-settings'), __( 'Automatic Friends', 's8d-bpaf-settings' ), 'manage_options', 's8d-bpaf-settings', array( $this, 's8d_bpaf_settings_page' ) );
+		add_users_page( __( 'BuddyPress Automatic Friends', 's8d-bpaf-settings'), __( 'Automatic Friends', 's8d-bpaf-settings' ), 'manage_options', 's8d-bpaf-settings', array( $this, 'settings_page' ) );
 	}
 
 	/**
@@ -129,32 +129,33 @@ class BuddyPress_Automatic_Friends_Admin {
 	 * @since 1.5.0
 	 * @return null
 	 */
-	function s8d_bpaf_display_auto_friend_users() {
+	function display_auto_friend_users() {
 		?>
-		<p><?php _e( 'When new user accounts are registered, friendships between the new user and each of the following global friends will be created automatically.', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></p>
-		<h3 style="float: left; margin:1em 0;padding:0; line-height:2em;"><?php _e( 'Global Friends', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></h3>
+		<p><?php _e( 'When new user accounts are registered, friendships between the new user and each of the following global friends will be created automatically.', BPAF_Core::TEXT_DOMAIN );?></p>
+		<h3 style="float: left; margin:1em 0;padding:0; line-height:2em;"><?php _e( 'Global Friends', BPAF_Core::TEXT_DOMAIN );?></h3>
 		<div style="padding: 1em 0;">
-			<?php $search_text = __('Search by Username', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?>
+			<?php $search_text = __('Search by Username', BPAF_Core::TEXT_DOMAIN );?>
 			<input type="text" name="add-global-friend-field" id="add-global-friend-field" style="margin-left: 1em; color: #aaa;"value="<?php echo $search_text;?>" onfocus="if (this.value == '<?php echo $search_text;?>') {this.value = '';}" onblur="if (this.value == '') {this.value = '<?php echo $search_text;?>';}" size="40" maxlength="128">
-			<button id="add-global-friend-button" class="button" disabled="disabled"><?php _e( 'Add User', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></button>
+			<button id="add-global-friend-button" class="button" disabled="disabled"><?php _e( 'Add User', BPAF_Core::TEXT_DOMAIN );?></button>
 			<span class="spinner"></span>
 		</div>
 		<?php
-
-		$options = get_option( BuddyPress_Automatic_Friends_Core::OPTION );
+		// Legacy Support
+		$options = get_option( BPAF_Core::OPTION );
 		$s8d_bpaf_user_ids = $options['s8d_bpaf_user_ids'];
 		$friend_user_ids = explode(',', $s8d_bpaf_user_ids);
 
+		// Modern
 		$friend_user_ids = $global_friend_user_ids = bpaf_get_global_friends();
 		?>
 		<form id="global-friends-form">
-		<?php wp_nonce_field( BuddyPress_Automatic_Friends_Core::NONCE, BuddyPress_Automatic_Friends_Core::NONCE, false ); ?>
+		<?php wp_nonce_field( BPAF_Core::NONCE, BPAF_Core::NONCE, false ); ?>
 		<table class="wp-list-table widefat fixed users" cellspacing="0" style="clear:left;">
 			<thead>
 				<tr>
-				  <th scope="col" id="username" class="manage-column column-username sortable desc" style=""><a><span><?php _e( 'Username', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></span></a></th>
-				  <th scope="col" id="name" class="manage-column column-name sortable desc" style=""><a><span><?php _e( 'Name', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></span></a></th>
-				  <th scope="col" id="friends" class="manage-column column-friends sortable desc" style=""><a><span><?php _e( 'Friends', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></span></a></th>
+				  <th scope="col" id="username" class="manage-column column-username sortable desc" style=""><a><span><?php _e( 'Username', BPAF_Core::TEXT_DOMAIN );?></span></a></th>
+				  <th scope="col" id="name" class="manage-column column-name sortable desc" style=""><a><span><?php _e( 'Name', BPAF_Core::TEXT_DOMAIN );?></span></a></th>
+				  <th scope="col" id="friends" class="manage-column column-friends sortable desc" style=""><a><span><?php _e( 'Friends', BPAF_Core::TEXT_DOMAIN );?></span></a></th>
 				</tr>
 			</thead>
 			<?php
@@ -175,9 +176,9 @@ class BuddyPress_Automatic_Friends_Admin {
 			?>
 			<tfoot>
 				<tr>
-				  <th scope="col" id="username" class="manage-column column-username sortable desc" style=""><a><span><?php _e( 'Username', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></span></a></th>
-				  <th scope="col" id="name" class="manage-column column-name sortable desc" style=""><a><span><?php _e( 'Name', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></span></a></th>
-				  <th scope="col" id="friends" class="manage-column column-friends sortable desc" style=""><a><span><?php _e( 'Friends', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></span></a></th>
+				  <th scope="col" id="username" class="manage-column column-username sortable desc" style=""><a><span><?php _e( 'Username', BPAF_Core::TEXT_DOMAIN );?></span></a></th>
+				  <th scope="col" id="name" class="manage-column column-name sortable desc" style=""><a><span><?php _e( 'Name', BPAF_Core::TEXT_DOMAIN );?></span></a></th>
+				  <th scope="col" id="friends" class="manage-column column-friends sortable desc" style=""><a><span><?php _e( 'Friends', BPAF_Core::TEXT_DOMAIN );?></span></a></th>
 				</tr>
 			</tfoot>
 		</table>
@@ -191,20 +192,20 @@ class BuddyPress_Automatic_Friends_Admin {
 	 * @uses get_admin_url, settings_fields, do_settings_sections
 	 * @return null
 	 */
-	function s8d_bpaf_settings_page() {
+	function settings_page() {
 		?>
 		<div class="wrap">
 			<?php //screen_icon(); ?>
-			<h2><?php _e( 'BuddyPress Automatic Friends', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></h2>
+			<h2><?php _e( 'BuddyPress Automatic Friends', BPAF_Core::TEXT_DOMAIN );?></h2>
 			<div id="poststuff" class="metabox-holder has-right-sidebar">
 				<div class="inner-sidebar" id="side-info-column">
 					<div id="side-sortables" class="meta-box-sortables ui-sortable">
 						<div id="bpaf_display_optin" class="postbox ">
-							<h3 class="hndle"><span><?php _e( 'Help Improve BP Automatic Friends', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></span></h3>
+							<h3 class="hndle"><span><?php _e( 'Help Improve BP Automatic Friends', BPAF_Core::TEXT_DOMAIN );?></span></h3>
 							<div class="inside">
-								<p><?php _e( 'We would really appreciate your input to help us continue to improve the product.', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></p>
+								<p><?php _e( 'We would really appreciate your input to help us continue to improve the product.', BPAF_Core::TEXT_DOMAIN );?></p>
 								<p>
-								<?php printf( __( 'Find us on %1$s or donate to the project using the button below.', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN ), '<a href="https://github.com/stevenkword/BuddyPress-Automatic-Friends" target="_blank">GitHub</a>' ); ?>
+								<?php printf( __( 'Find us on %1$s or donate to the project using the button below.', BPAF_Core::TEXT_DOMAIN ), '<a href="https://github.com/stevenkword/BuddyPress-Automatic-Friends" target="_blank">GitHub</a>' ); ?>
 								</p>
 								<div style="width: 100%; text-align: center;">
 									<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
@@ -217,20 +218,20 @@ class BuddyPress_Automatic_Friends_Admin {
 							</div>
 						</div>
 						<div id="bpaf_display_contact" class="postbox ">
-							<h3 class="hndle"><span><?php _e( 'Contact BP Automatic Friends', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></span></h3>
+							<h3 class="hndle"><span><?php _e( 'Contact BP Automatic Friends', BPAF_Core::TEXT_DOMAIN );?></span></h3>
 							<div class="inside">
 								<ul class="bpaf-contact-links">
-									<li><a class="link-bpaf-forum" href="http://wordpress.org/support/plugin/bp-automatic-friends" target="_blank"><?php _e( 'Support Forums', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></a></li>
-									<li><a class="link-bpaf-web" href="http://stevenword.com/plugins/bp-automatic-friends/" target="_blank"><?php _e( 'BP Automatic Friends on the Web', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></a></li>
-									<li><a class="link-bpaf-github" href="https://github.com/stevenkword/BuddyPress-Automatic-Friends" target="_blank"><?php _e( 'GitHub Project', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></a></li>
-									<li><a class="link-bpaf-review" href="http://wordpress.org/support/view/plugin-reviews/bp-automatic-friends" target="_blank"><?php _e( 'Review on WordPress.org', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></a></li>
+									<li><a class="link-bpaf-forum" href="http://wordpress.org/support/plugin/bp-automatic-friends" target="_blank"><?php _e( 'Support Forums', BPAF_Core::TEXT_DOMAIN );?></a></li>
+									<li><a class="link-bpaf-web" href="http://stevenword.com/plugins/bp-automatic-friends/" target="_blank"><?php _e( 'BP Automatic Friends on the Web', BPAF_Core::TEXT_DOMAIN );?></a></li>
+									<li><a class="link-bpaf-github" href="https://github.com/stevenkword/BuddyPress-Automatic-Friends" target="_blank"><?php _e( 'GitHub Project', BPAF_Core::TEXT_DOMAIN );?></a></li>
+									<li><a class="link-bpaf-review" href="http://wordpress.org/support/view/plugin-reviews/bp-automatic-friends" target="_blank"><?php _e( 'Review on WordPress.org', BPAF_Core::TEXT_DOMAIN );?></a></li>
 								</ul>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div id="post-body-content">
-					<?php $this->s8d_bpaf_display_auto_friend_users();?>
+					<?php $this->display_auto_friend_users();?>
 				</div>
 			</div>
 		</div><!--/.wrap-->
@@ -243,17 +244,17 @@ class BuddyPress_Automatic_Friends_Admin {
 	 * @return null
 	 */
 	function action_personal_options( $user ) {
-		$meta_value = get_user_meta( $user->ID, BuddyPress_Automatic_Friends_Core::METAKEY, true );
+		$meta_value = get_user_meta( $user->ID, BPAF_Core::METAKEY, true );
 		?>
 			</table>
 			<table class="form-table">
-			<h3><?php _e( 'BuddyPress Automatic Friends', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></h3>
+			<h3><?php _e( 'BuddyPress Automatic Friends', BPAF_Core::TEXT_DOMAIN );?></h3>
 			<tr>
-				<th scope="row"><?php _e( 'Global Friend', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></th>
+				<th scope="row"><?php _e( 'Global Friend', BPAF_Core::TEXT_DOMAIN );?></th>
 				<td>
 					<label for="global-friend">
 						<input type="checkbox" id="global-friend" name="global-friend" <?php checked( $meta_value ); ?> />
-						<span> <?php _e( 'Automatically create friendships with all new users', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></span>
+						<span> <?php _e( 'Automatically create friendships with all new users', BPAF_Core::TEXT_DOMAIN );?></span>
 					</label>
 				</td>
 			</tr>
@@ -271,7 +272,7 @@ class BuddyPress_Automatic_Friends_Admin {
 		//	return false;
 
 		$meta_value = isset( $_REQUEST['global-friend'] ) ? true : false;
-		update_usermeta( $user_id, BuddyPress_Automatic_Friends_Core::METAKEY, $meta_value );
+		update_usermeta( $user_id, BPAF_Core::METAKEY, $meta_value );
 
 		// Update the friend counts
 		BP_Friends_Friendship::total_friend_count( $user_id );
@@ -284,8 +285,8 @@ class BuddyPress_Automatic_Friends_Admin {
 	 */
 	function action_ajax_bpaf_suggest_global_friend() {
 		// Nonce check
-		if ( ! wp_verify_nonce( $_REQUEST['nonce'], BuddyPress_Automatic_Friends_Core::NONCE ) ) {
-			wp_die( BuddyPress_Automatic_Friends_Core::NONCE_FAIL_MSG );
+		if ( ! wp_verify_nonce( $_REQUEST['nonce'], BPAF_Core::NONCE ) ) {
+			wp_die( BPAF_Core::NONCE_FAIL_MSG );
 		}
 
 		global $bp;
@@ -313,8 +314,8 @@ class BuddyPress_Automatic_Friends_Admin {
 	 */
 	function action_ajax_bpaf_add_global_friend() {
 		// Nonce check
-		if ( ! wp_verify_nonce( $_REQUEST['nonce'], BuddyPress_Automatic_Friends_Core::NONCE ) ) {
-			wp_die( BuddyPress_Automatic_Friends_Core::NONCE_FAIL_MSG );
+		if ( ! wp_verify_nonce( $_REQUEST['nonce'], BPAF_Core::NONCE ) ) {
+			wp_die( BPAF_Core::NONCE_FAIL_MSG );
 		}
 
 		if( ! isset( $_REQUEST['username'] ) && empty( $_REQUEST['username'] ) ) {
@@ -325,7 +326,7 @@ class BuddyPress_Automatic_Friends_Admin {
 		$user = get_user_by( 'login', $_REQUEST['username'] );
 		if( isset( $user->data->ID ) ) {
 			// Update the user and related friendships
-			update_usermeta( $user->data->ID, BuddyPress_Automatic_Friends_Core::METAKEY, true );
+			update_usermeta( $user->data->ID, BPAF_Core::METAKEY, true );
 
 			// This is wrong MMMMMKay! This is looking for a newly registred user, not a global friend
 			bpaf_create_friendships( $user->data->ID );
@@ -355,8 +356,8 @@ class BuddyPress_Automatic_Friends_Admin {
 			<strong><?php echo $friend_userdata->user_login;?></strong>
 			<br>
 			<div class="row-actions">
-				<span class="edit"><a href="<?php echo get_edit_user_link( $friend_user_id ); ?>" title="Edit this item"><?php _e( 'Edit', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></a> | </span>
-				<span id="remove-<?php echo $friend_userdata->user_login;?>" class="trash"><a class="submitdelete" title="Move this item to the Trash" href="javascript:void(0);"><?php _e( 'Remove', BuddyPress_Automatic_Friends_Core::TEXT_DOMAIN );?></a></span>
+				<span class="edit"><a href="<?php echo get_edit_user_link( $friend_user_id ); ?>" title="Edit this item"><?php _e( 'Edit', BPAF_Core::TEXT_DOMAIN );?></a> | </span>
+				<span id="remove-<?php echo $friend_userdata->user_login;?>" class="trash"><a class="submitdelete" title="Move this item to the Trash" href="javascript:void(0);"><?php _e( 'Remove', BPAF_Core::TEXT_DOMAIN );?></a></span>
 			</div>
 		  </td>
 
@@ -378,8 +379,8 @@ class BuddyPress_Automatic_Friends_Admin {
 	 */
 	function action_ajax_bpaf_delete_global_friend() {
 		// Nonce check
-		if ( ! wp_verify_nonce( $_REQUEST['nonce'], BuddyPress_Automatic_Friends_Core::NONCE ) ) {
-			wp_die( BuddyPress_Automatic_Friends_Core::NONCE_FAIL_MSG );
+		if ( ! wp_verify_nonce( $_REQUEST['nonce'], BPAF_Core::NONCE ) ) {
+			wp_die( BPAF_Core::NONCE_FAIL_MSG );
 		}
 
 		if( ! isset( $_REQUEST['ID'] ) && empty( $_REQUEST['ID'] ) ) {
@@ -387,7 +388,7 @@ class BuddyPress_Automatic_Friends_Admin {
 		}
 
 		// Remove Global Friend status
-		update_usermeta( $_REQUEST['ID'], BuddyPress_Automatic_Friends_Core::METAKEY, false );
+		update_usermeta( $_REQUEST['ID'], BPAF_Core::METAKEY, false );
 		bpaf_destroy_friendships( $_REQUEST['ID'] );
 
 		// Return the number of friends remaning
@@ -396,4 +397,4 @@ class BuddyPress_Automatic_Friends_Admin {
 	}
 
 } // Class
-BuddyPress_Automatic_Friends_Admin::instance();
+BPAF_Admin::instance();

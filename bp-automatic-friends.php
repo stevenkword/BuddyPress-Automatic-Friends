@@ -35,8 +35,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * DO NO SHIP WITHOUT MAKING A UPDATE PROCEDURE
  ******************************************************************************/
 
-
-class BuddyPress_Automatic_Friends_Core {
+/**
+ * BuddPress Automatic Friends Core
+ */
+class BPAF_Core {
 
 	const REVISION       = '20131222';
 	const METAKEY        = 's8d_bpaf_global_friend';
@@ -135,7 +137,7 @@ class BuddyPress_Automatic_Friends_Core {
 
 		// The Query
 		$user_query = new WP_User_Query( array(
-			'meta_key' => BuddyPress_Automatic_Friends_Core::METAKEY,
+			'meta_key' => BPAF_Core::METAKEY,
 			'meta_value' => true,
 			'fields' => 'ID'
 		) );
@@ -164,7 +166,7 @@ class BuddyPress_Automatic_Friends_Core {
 		$initiator_user_info = get_userdata( $initiator_user_id );
 
 		/* Get the friend users id(s) */
-		//$options = get_option( BuddyPress_Automatic_Friends_Core::OPTION );
+		//$options = get_option( BPAF_Core::OPTION );
 		//$global_friend_user_ids = $options['s8d_bpaf_user_ids'];
 
 		$global_friend_user_ids = self::get_global_friends();
@@ -222,26 +224,26 @@ class BuddyPress_Automatic_Friends_Core {
 	}
 
 }
-BuddyPress_Automatic_Friends_Core::instance();
+BPAF_Core::instance();
 
 /* Wrappers */
 if ( ! function_exists( 'bpaf_get_global_friends' ) ) {
 	function bpaf_get_global_friends() {
-		return BuddyPress_Automatic_Friends_Core::get_global_friends();
+		return BPAF_Core::get_global_friends();
 	}
 }
 if ( ! function_exists( 'bpaf_create_friendships' ) ) {
 	function bpaf_create_friendships( $initiator_user_id ) {
-		BuddyPress_Automatic_Friends_Core::create_friendships( $initiator_user_id );
+		BPAF_Core::create_friendships( $initiator_user_id );
 	}
 }
 if ( ! function_exists( 'bpaf_destroy_friendships' ) ) {
 	function bpaf_destroy_friendships( $initiator_user_id ) {
-		BuddyPress_Automatic_Friends_Core::destroy_friendships( $initiator_user_id );
+		BPAF_Core::destroy_friendships( $initiator_user_id );
 	}
 }
 if ( ! function_exists( 'bpaf_update_friendship_counts' ) ) {
 	function bpaf_update_friendship_counts( $initiator_user_id ) {
-		BuddyPress_Automatic_Friends_Core::update_friendship_counts( $initiator_user_id );
+		BPAF_Core::update_friendship_counts( $initiator_user_id );
 	}
 }
