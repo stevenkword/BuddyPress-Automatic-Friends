@@ -38,11 +38,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 class BuddyPress_Automatic_Friends_Core {
 
-	const REVISION    = '20131221';
-	const NONCE       = 's8d_bpaf_nonce';
-	const METAKEY     = 's8d_bpaf_global_friend';
-	const OPTION      = 's8d_bpaf_options';
-	const TEXT_DOMAIN = 'bp-automatic-friends';
+	const REVISION       = '20131222';
+	const METAKEY        = 's8d_bpaf_global_friend';
+	const OPTION         = 's8d_bpaf_options';
+	const TEXT_DOMAIN    = 'bp-automatic-friends';
+	const NONCE          = 's8d_bpaf_nonce';
+	const NONCE_FAIL_MSG = 'Cheatin&#8217; huh?';
 
 	/* Define and register singleton */
 	private static $instance = false;

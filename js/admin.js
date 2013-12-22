@@ -1,9 +1,22 @@
 jQuery( document ).ready( function( $ ) {
 	var $addGlobalFriendField = $('#add-global-friend-field');
 	var $addGlobalFriendButton = $('#add-global-friend-button');
+	var nonce = $('#s8d_bpaf_nonce').val();
+	var params = { 'nonce':nonce };
+
+console.log(params);
 
 	$addGlobalFriendField.autocomplete({
-		source: ajaxurl + '?action=bpaf_suggest_global_friend',
+		source: function(request, response) {
+			$.ajax({
+				url: ajaxurl + '?action=bpaf_suggest_global_friend',
+				dataType: "json",
+				data: jQuery.param(params),
+				success: function(data) {
+					response(data);
+				}
+			});
+		},
 		select: function( event, ui ) {
 			$addGlobalFriendButton.attr('disabled', false);
 			$addGlobalFriendButton.focus();
@@ -13,7 +26,8 @@ jQuery( document ).ready( function( $ ) {
 			$addGlobalFriendButton.attr('disabled', true);
 			$addGlobalFriendField.css( 'color', '#aaa' );
 			updateFieldTextColor();
-		}
+		},
+
 	});
 
 	function updateFieldTextColor() {
@@ -25,7 +39,8 @@ jQuery( document ).ready( function( $ ) {
 	$addGlobalFriendButton.click( function(e) {
 		var $self = $(this);
 		var $parentTable = $('.wp-list-table'); // TODO: way too general
-		var params = { 'username':$addGlobalFriendField.val() };
+		var nonce = $('#s8d_bpaf_nonce').val();
+		var params = { 'username':$addGlobalFriendField.val(), 'nonce':nonce };
 
 		// Send the contents of the existing post
 		$.ajax({
@@ -60,8 +75,9 @@ jQuery( document ).ready( function( $ ) {
 		var $parentTable = $('.wp-list-table'); // TODO: way too general
 		var $parentTableRow = $self.parents('tr');
 		var userID = $parentTableRow.find('.bpaf-user-id').val();
+		var nonce = $('#s8d_bpaf_nonce').val();
 
-		var params = { 'ID':userID };
+		var params = { 'ID':userID, 'nonce':nonce };
 
 		$.ajax({
 			url: ajaxurl + '?action=bpaf_delete_global_friend',

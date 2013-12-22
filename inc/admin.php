@@ -284,12 +284,11 @@ class BuddyPress_Automatic_Friends_Admin {
 	 */
 	function action_ajax_bpaf_suggest_global_friend() {
 		// Nonce check
-		//if ( ! wp_verify_nonce( $_REQUEST['nonce'], $this->nonce_field ) ) {
-		//	wp_die( $this->nonce_fail_message );
-		//}
+		if ( ! wp_verify_nonce( $_REQUEST['nonce'], BuddyPress_Automatic_Friends_Core::NONCE ) ) {
+			wp_die( BuddyPress_Automatic_Friends_Core::NONCE_FAIL_MSG );
+		}
 
 		global $bp;
-
 		$global_friend_user_ids = bpaf_get_global_friends();
 
 		$users = get_users( array(
@@ -314,9 +313,9 @@ class BuddyPress_Automatic_Friends_Admin {
 	 */
 	function action_ajax_bpaf_add_global_friend() {
 		// Nonce check
-		//if ( ! wp_verify_nonce( $_REQUEST['nonce'], $this->nonce_field ) ) {
-		//	wp_die( $this->nonce_fail_message );
-		//}
+		if ( ! wp_verify_nonce( $_REQUEST['nonce'], BuddyPress_Automatic_Friends_Core::NONCE ) ) {
+			wp_die( BuddyPress_Automatic_Friends_Core::NONCE_FAIL_MSG );
+		}
 
 		if( ! isset( $_REQUEST['username'] ) && empty( $_REQUEST['username'] ) ) {
 		 	die;
@@ -379,9 +378,9 @@ class BuddyPress_Automatic_Friends_Admin {
 	 */
 	function action_ajax_bpaf_delete_global_friend() {
 		// Nonce check
-		//if ( ! wp_verify_nonce( $_REQUEST['nonce'], $this->nonce_field ) ) {
-		//	wp_die( $this->nonce_fail_message );
-		//}
+		if ( ! wp_verify_nonce( $_REQUEST['nonce'], BuddyPress_Automatic_Friends_Core::NONCE ) ) {
+			wp_die( BuddyPress_Automatic_Friends_Core::NONCE_FAIL_MSG );
+		}
 
 		if( ! isset( $_REQUEST['ID'] ) && empty( $_REQUEST['ID'] ) ) {
 		 	die;
