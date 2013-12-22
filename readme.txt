@@ -20,6 +20,9 @@ Automatically create and accept friendships for specified users upon new user re
 
 == Changelog ==
 
+= 2.0.0 =
+* What wasn't changed?
+
 = 1.6.2 =
 
 * Removes hooks from account sign-up and activation.
