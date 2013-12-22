@@ -294,7 +294,7 @@ class BPAF_Admin {
 
 		$users = get_users( array(
 			//'fields' => 'user_nicename' // This is returning numeric, wtf?
-			'exclude' => array_merge( $global_friend_user_ids, array( $bp->loggedin_user->id ) )
+			'exclude' => $global_friend_user_ids
 		 ) );
 
 		$user_ids = array();
