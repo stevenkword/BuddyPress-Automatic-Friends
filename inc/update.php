@@ -55,7 +55,7 @@ class BPAF_Update {
 		if( $version = get_option( self::OPTION_VERSION, false ) ) {
 			$this->version = $version;
 		} else {
-			$this->version = BPAF_CORE::VERSION;
+			$this->version = BPAF_Core::VERSION;
 			add_option( self::OPTION_VERSION, $this->version );
 		}
 
@@ -71,7 +71,7 @@ class BPAF_Update {
 	 */
 	function action_init_perform_updates() {
 		// Check if the version has changed and if so perform the necessary actions
-		if ( ! isset( $this->version ) || $this->version < BPAF_CORE::VERSION ) {
+		if ( ! isset( $this->version ) || $this->version < BPAF_Core::VERSION ) {
 
 			// Perform updates here if necessary
 			if( $this->version < '2.0.0' ) {
@@ -79,7 +79,7 @@ class BPAF_Update {
 			}
 
 			// Update the version information in the database
-			update_option( self::OPTION_VERSION, BPAF_CORE::VERSION );
+			update_option( self::OPTION_VERSION, BPAF_Core::VERSION );
 		}
 	}
 

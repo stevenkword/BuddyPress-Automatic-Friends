@@ -16,8 +16,6 @@
  */
 class BPAF_Admin {
 
-	const SCRIPTS_VERSION = '2';
-
 	public $plugins_url;
 
 	/* Define and register singleton */
@@ -103,10 +101,10 @@ class BPAF_Admin {
 	 * @return null
 	 */
 	public function action_admin_enqueue_scripts() {
-		wp_enqueue_script( 'bpaf-admin', $this->plugins_url. '/js/admin.js', array( 'jquery', 'jquery-ui-autocomplete' ), self::SCRIPTS_VERSION, true );
+		wp_enqueue_script( 'bpaf-admin', $this->plugins_url. '/js/admin.js', array( 'jquery', 'jquery-ui-autocomplete' ), BPAF_Core::REVISION, true );
 
-		wp_enqueue_style( 'bpaf-genericons', $this->plugins_url . '/fonts/genericons/genericons.css', '', self::SCRIPTS_VERSION );
-		wp_enqueue_style( 'bpaf-admin', $this->plugins_url . '/css/admin.css', array( 'bpaf-genericons' ), self::SCRIPTS_VERSION );
+		wp_enqueue_style( 'bpaf-genericons', $this->plugins_url . '/fonts/genericons/genericons.css', '', BPAF_Core::REVISION );
+		wp_enqueue_style( 'bpaf-admin', $this->plugins_url . '/css/admin.css', array( 'bpaf-genericons' ), BPAF_Core::REVISION );
 	}
 
 	/**
