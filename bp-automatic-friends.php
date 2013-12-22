@@ -40,12 +40,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 class BPAF_Core {
 
+	const VERSION        = '2.0.0';
 	const REVISION       = '20131222';
 	const METAKEY        = 's8d_bpaf_global_friend';
 	const OPTION         = 's8d_bpaf_options';
-	const TEXT_DOMAIN    = 'bp-automatic-friends';
 	const NONCE          = 's8d_bpaf_nonce';
 	const NONCE_FAIL_MSG = 'Cheatin&#8217; huh?';
+	const TEXT_DOMAIN    = 'bp-automatic-friends';
 
 	/* Define and register singleton */
 	private static $instance = false;
@@ -97,6 +98,7 @@ class BPAF_Core {
 		/* Load the admin */
 		if ( is_admin() ){
 			require_once( dirname(__FILE__) . '/inc/admin.php' );
+			require_once( dirname(__FILE__) . '/inc/update.php' );
 		}
 
 		/* Do this the first time a new user logs in */
