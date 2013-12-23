@@ -284,9 +284,9 @@ class BPAF_Admin {
 	 */
 	function action_ajax_bpaf_suggest_global_friend() {
 		// Nonce check
-		if ( ! wp_verify_nonce( $_REQUEST['nonce'], BPAF_Core::NONCE ) ) {
-			wp_die( BPAF_Core::NONCE_FAIL_MSG );
-		}
+		//if ( ! wp_verify_nonce( $_REQUEST['nonce'], BPAF_Core::NONCE ) ) {
+			//wp_die( BPAF_Core::NONCE_FAIL_MSG );
+		//}
 
 		global $bp;
 		$global_friend_user_ids = bpaf_get_global_friends();
@@ -298,11 +298,17 @@ class BPAF_Admin {
 
 		$user_ids = array();
 		foreach( $users as $user ) {
-			$user_ids[] = $user->data->user_login;
+			$user_ids[] = array(
+				'ID'           => $user->data->ID,
+				'label'        => $user->data->user_login,
+				'display_name' => $user->data->display_name
+			);
 		}
 
 		header('Content-Type: application/x-json');
 		echo $json = json_encode( $user_ids );
+
+		oomph_error_log('[json]', $json);
 		die;
 	}
 

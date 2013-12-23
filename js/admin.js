@@ -5,13 +5,18 @@ jQuery( document ).ready( function( $ ) {
 	var params = { 'nonce':nonce };
 
 	$addGlobalFriendField.autocomplete({
+		autoFocus: true,
+		minLength: 2,
 		source: function(request, response) {
+			// Add the search term to the request
+			params.term = request.term;
+			// Remote Source
 			$.ajax({
 				url: ajaxurl + '?action=bpaf_suggest_global_friend',
 				dataType: "json",
-				data: jQuery.param(params),
-				success: function(data) {
-					response(data);
+					data: jQuery.param(params),
+					success: function(data){
+						return response($.ui.autocomplete.filter(data, request.term));
 				}
 			});
 		},
@@ -24,8 +29,7 @@ jQuery( document ).ready( function( $ ) {
 			$addGlobalFriendButton.attr('disabled', true);
 			$addGlobalFriendField.css( 'color', '#aaa' );
 			updateFieldTextColor();
-		},
-
+		}
 	});
 
 	function updateFieldTextColor() {
