@@ -52,6 +52,8 @@ jQuery( document ).ready( function( $ ) {
 	$addGlobalFriendButton.click( function(e) {
 		var $self = $(this);
 		var $parentTable = $('.wp-list-table'); // TODO: way too general
+		var $tableContainer = $('#global-friend-table-container');
+
 		var nonce = $('#bpaf_nonce').val();
 		var params = { 'username':$addGlobalFriendField.val(), 'nonce':nonce };
 
@@ -66,7 +68,7 @@ jQuery( document ).ready( function( $ ) {
 			complete: function() {
 				//$('.spinner').hide();
 			},
-			success: function(result) {
+			success: function(response) {
 				$addGlobalFriendButton.attr('disabled', true);
 				$addGlobalFriendField.css( 'color', '#aaa' );
 				updateFieldTextColor();
@@ -75,7 +77,8 @@ jQuery( document ).ready( function( $ ) {
 				$('.spinner').hide();
 				// Return the excerpt from the editor
 				$('.bpaf-empty-table-row').remove();
-				$parentTable.append(result);
+
+				$tableContainer.html(response);
 			}
 		});
 	});
@@ -92,6 +95,7 @@ jQuery( document ).ready( function( $ ) {
 		var $self = $(this);
 		var $parentTable = $('.wp-list-table'); // TODO: way too general
 		var $parentTableRow = $self.parents('tr');
+		var $tableContainer = $('#global-friend-table-container');
 		var userID = $parentTableRow.find('.bpaf-user-id').val();
 		var nonce = $('#bpaf_nonce').val();
 
@@ -109,10 +113,7 @@ jQuery( document ).ready( function( $ ) {
 			},
 			success: function( response ) {
 				$('.spinner').hide();
-				$parentTableRow.remove();
-				if ( 1 >= response ) {
-					$parentTable.append('<tr class="bpaf-empty-table-row"><td colspan="3">No Global Friends found.</td></tr>');
-				}
+				$tableContainer.html(response);
 			}
 		});
 	});

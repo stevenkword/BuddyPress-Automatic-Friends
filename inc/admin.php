@@ -124,17 +124,8 @@ class BPAF_Admin {
 	 * @since 1.5.0
 	 * @return null
 	 */
-	function display_auto_friend_users() {
-		?>
-		<p><?php _e( 'When new user accounts are registered, friendships between the new user and each of the following global friends will be created automatically.', BPAF_Core::TEXT_DOMAIN );?></p>
-		<h3 style="float: left; margin:1em 0;padding:0; line-height:2em;"><?php _e( 'Global Friends', BPAF_Core::TEXT_DOMAIN );?></h3>
-		<div style="padding: 1em 0;">
-			<?php $search_text = __('Search by Username', BPAF_Core::TEXT_DOMAIN );?>
-			<input type="text" name="add-global-friend-field" id="add-global-friend-field" style="margin-left: 1em; color: #aaa;"value="<?php echo $search_text;?>" onfocus="if (this.value == '<?php echo $search_text;?>') {this.value = '';}" onblur="if (this.value == '') {this.value = '<?php echo $search_text;?>';}" size="40" maxlength="128">
-			<button id="add-global-friend-button" class="button" disabled="disabled"><?php _e( 'Add User', BPAF_Core::TEXT_DOMAIN );?></button>
-			<span class="spinner"></span>
-		</div>
-		<?php
+	function render_global_friend_table() {
+
 		// Legacy Support
 		$options = get_option( BPAF_Core::LEGACY_OPTION );
 		if( isset( $options[ BPAF_Core::LEGACY_OPTION . '_ids'] ) ) {
@@ -197,7 +188,7 @@ class BPAF_Admin {
 			<div id="poststuff" class="metabox-holder has-right-sidebar">
 				<div class="inner-sidebar" id="side-info-column">
 					<div id="side-sortables" class="meta-box-sortables ui-sortable">
-						<div id="bpaf_display_optin" class="postbox ">
+						<div id="bpaf_display_option" class="postbox ">
 							<h3 class="hndle"><span><?php _e( 'Help Improve BP Automatic Friends', BPAF_Core::TEXT_DOMAIN );?></span></h3>
 							<div class="inside">
 								<p><?php _e( 'We would really appreciate your input to help us continue to improve the product.', BPAF_Core::TEXT_DOMAIN );?></p>
@@ -228,7 +219,17 @@ class BPAF_Admin {
 					</div>
 				</div>
 				<div id="post-body-content">
-					<?php $this->display_auto_friend_users();?>
+					<p><?php _e( 'When new user accounts are registered, friendships between the new user and each of the following global friends will be created automatically.', BPAF_Core::TEXT_DOMAIN );?></p>
+					<h3 style="float: left; margin:1em 0;padding:0; line-height:2em;"><?php _e( 'Global Friends', BPAF_Core::TEXT_DOMAIN );?></h3>
+					<div style="padding: 1em 0;">
+						<?php $search_text = __('Search by Username', BPAF_Core::TEXT_DOMAIN );?>
+						<input type="text" name="add-global-friend-field" id="add-global-friend-field" style="margin-left: 1em; color: #aaa;"value="<?php echo $search_text;?>" onfocus="if (this.value == '<?php echo $search_text;?>') {this.value = '';}" onblur="if (this.value == '') {this.value = '<?php echo $search_text;?>';}" size="40" maxlength="128">
+						<button id="add-global-friend-button" class="button" disabled="disabled"><?php _e( 'Add User', BPAF_Core::TEXT_DOMAIN );?></button>
+						<span class="spinner"></span>
+					</div>
+					<div id="global-friend-table-container">
+						<?php $this->render_global_friend_table();?>
+					</div>
 				</div>
 			</div>
 		</div><!--/.wrap-->
@@ -335,7 +336,10 @@ class BPAF_Admin {
 			bpaf_create_friendships( $user->data->ID );
 
 			// Add a new row to the table
-			$this->render_global_friend_table_row( $user->data->ID );
+			//$this->render_global_friend_table_row( $user->data->ID );
+			//
+			//Redraw the table
+			$this->render_global_friend_table();
 		}
 		die;
 	}
@@ -395,7 +399,10 @@ class BPAF_Admin {
 		bpaf_destroy_friendships( $_REQUEST['ID'] );
 
 		// Return the number of friends remaning
-		echo $global_friends_remaining = count( bpaf_get_global_friends() );
+		// echo $global_friends_remaining = count( bpaf_get_global_friends() );
+		//
+		// Redraw the table
+		$this->render_global_friend_table();
 		die;
 	}
 
