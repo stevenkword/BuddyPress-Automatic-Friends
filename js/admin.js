@@ -1,6 +1,8 @@
 jQuery( document ).ready( function( $ ) {
 	var $addGlobalFriendField = $('#add-global-friend-field');
 	var $addGlobalFriendButton = $('#add-global-friend-button');
+	var $tableContainer = $('#global-friend-table-container');
+
 	var nonce = $('#bpaf_nonce').val();
 	var params = { 'nonce':nonce };
 	var cache = {};
@@ -52,8 +54,6 @@ jQuery( document ).ready( function( $ ) {
 	$addGlobalFriendButton.click( function(e) {
 		var $self = $(this);
 		var $parentTable = $('.wp-list-table'); // TODO: way too general
-		var $tableContainer = $('#global-friend-table-container');
-
 		var nonce = $('#bpaf_nonce').val();
 		var params = { 'username':$addGlobalFriendField.val(), 'nonce':nonce };
 
@@ -75,7 +75,8 @@ jQuery( document ).ready( function( $ ) {
 				$addGlobalFriendField.val('Search by Username');
 
 				$('.spinner').hide();
-				// Return the excerpt from the editor
+
+				// Return the excerpt from the editor ???
 				$('.bpaf-empty-table-row').remove();
 
 				$tableContainer.html(response);
@@ -84,10 +85,8 @@ jQuery( document ).ready( function( $ ) {
 	});
 
 	// Remove a Global Friend
-	$('#global-friends-form').on( 'click', '.trash', function(e) {
-
+	$tableContainer.on( 'click', '.trash', function(e) {
 		e.preventDefault();
-
 		var confirmDelete = confirm("Removing this user will delete ALL friendships related the this user. 'Cancel' to stop, 'OK' to delete.");
 		if( false === confirmDelete )
 			return;
@@ -95,10 +94,8 @@ jQuery( document ).ready( function( $ ) {
 		var $self = $(this);
 		var $parentTable = $('.wp-list-table'); // TODO: way too general
 		var $parentTableRow = $self.parents('tr');
-		var $tableContainer = $('#global-friend-table-container');
 		var userID = $parentTableRow.find('.bpaf-user-id').val();
 		var nonce = $('#bpaf_nonce').val();
-
 		var params = { 'ID':userID, 'nonce':nonce };
 
 		$.ajax({
