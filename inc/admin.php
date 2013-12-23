@@ -307,8 +307,6 @@ class BPAF_Admin {
 
 		header('Content-Type: application/x-json');
 		echo $json = json_encode( $user_ids );
-
-		oomph_error_log('[json]', $json);
 		die;
 	}
 

@@ -3,11 +3,20 @@ jQuery( document ).ready( function( $ ) {
 	var $addGlobalFriendButton = $('#add-global-friend-button');
 	var nonce = $('#bpaf_nonce').val();
 	var params = { 'nonce':nonce };
+	var cache = {};
 
 	$addGlobalFriendField.autocomplete({
 		autoFocus: true,
 		minLength: 2,
 		source: function(request, response) {
+			var term = request.term;
+			// Has the request been made before?
+			if ( term in cache ) {
+				console.log(cache);
+				response( cache[ term ] );
+				return;
+			}
+
 			// Add the search term to the request
 			params.term = request.term;
 			// Remote Source
@@ -16,7 +25,10 @@ jQuery( document ).ready( function( $ ) {
 				dataType: "json",
 					data: jQuery.param(params),
 					success: function(data){
-						return response($.ui.autocomplete.filter(data, request.term));
+						//Cache this response since it is expensive
+						cache[ term ] = $.ui.autocomplete.filter(data, term);
+						response(cache[ term ]);
+						return;
 				}
 			});
 		},
