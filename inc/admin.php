@@ -86,11 +86,8 @@ class BPAF_Admin {
 	 * @return null
 	 */
 	function action_admin_init() {
-
-		/* Register Settings */
+		// Register Settings
 		register_setting( BPAF_Core::LEGACY_OPTION, BPAF_Core::LEGACY_OPTION, array( $this, 's8d_bpaf_settings_validate_options' ) );
-
-
 	}
 
 
