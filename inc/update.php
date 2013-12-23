@@ -55,13 +55,12 @@ class BPAF_Update {
 		if( $version = get_option( self::OPTION_VERSION, false ) ) {
 			$this->version = $version;
 		} else {
-			$this->version = BPAF_Core::VERSION;
+			// Perform updates if necessary
+			$this->version = '1.0.0';
 			add_option( self::OPTION_VERSION, $this->version );
+
+			add_action( 'init', array( $this, 'action_init_perform_updates' ) );
 		}
-
-		// Perform updates if necessary
-		add_action( 'init', array( $this, 'action_init_perform_updates' ) );
-
 	}
 
 	/**
@@ -75,7 +74,7 @@ class BPAF_Update {
 		if ( ! isset( $this->version ) || $this->version < BPAF_Core::VERSION ) {
 
 			// Perform updates here if necessary
-			if( $this->version < '2.0.0' ) {
+			if( (int) $this->version < '2.0.0' ) {
 
 				// Get the friend users id(s)
 				$options = get_option( BPAF_Core::LEGACY_OPTION );
@@ -93,7 +92,7 @@ class BPAF_Update {
 				}
 			}
 			// Update the version information in the database
-			//update_option( self::OPTION_VERSION, BPAF_Core::VERSION );
+			update_option( self::OPTION_VERSION, BPAF_Core::VERSION );
 			add_action('admin_notices', array( $this, 'admin_notice' ) );
 		}
 	}
