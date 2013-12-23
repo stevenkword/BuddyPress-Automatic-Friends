@@ -4,8 +4,6 @@ jQuery( document ).ready( function( $ ) {
 	var nonce = $('#bpaf_nonce').val();
 	var params = { 'nonce':nonce };
 
-console.log(params);
-
 	$addGlobalFriendField.autocomplete({
 		source: function(request, response) {
 			$.ajax({
@@ -54,6 +52,11 @@ console.log(params);
 				//$('.spinner').hide();
 			},
 			success: function(result) {
+				$addGlobalFriendButton.attr('disabled', true);
+				$addGlobalFriendField.css( 'color', '#aaa' );
+				updateFieldTextColor();
+				$addGlobalFriendField.val('Search by Username');
+
 				$('.spinner').hide();
 				// Return the excerpt from the editor
 				$('.bpaf-empty-table-row').remove();
