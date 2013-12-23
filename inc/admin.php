@@ -255,6 +255,7 @@ class BPAF_Admin {
 					<label for="global-friend">
 						<input type="checkbox" id="global-friend" name="global-friend" <?php checked( $meta_value ); ?> />
 						<span> <?php _e( 'Automatically create friendships with all new users', BPAF_Core::TEXT_DOMAIN );?></span>
+						<?php wp_nonce_field( BPAF_Core::NONCE, BPAF_Core::NONCE, false ); ?>
 					</label>
 				</td>
 			</tr>
@@ -267,9 +268,10 @@ class BPAF_Admin {
 	 * @since 2.0.0
 	 */
 	function action_personal_options_update( $user_id ) {
-		// @TODO: nonce check
-		//if ( !current_user_can( 'edit_user', $user_id ) )
-		//	return false;
+		// Nonce check
+		if ( ! wp_verify_nonce( $_REQUEST[ BPAF_Core::NONCE ], BPAF_Core::NONCE ) || ! current_user_can( 'edit_user', $user_id ) ) {
+			wp_die( BPAF_Core::NONCE_FAIL_MSG );
+		}
 
 		$meta_value = isset( $_REQUEST['global-friend'] ) ? true : false;
 		update_usermeta( $user_id, BPAF_Core::METAKEY, $meta_value );
