@@ -70,22 +70,41 @@ class BPAF_Update {
 	 * @since 2.0.0
 	 */
 	function action_init_perform_updates() {
+
 		// Check if the version has changed and if so perform the necessary actions
 		if ( ! isset( $this->version ) || $this->version < BPAF_Core::VERSION ) {
 
 			// Perform updates here if necessary
 			if( $this->version < '2.0.0' ) {
-				//echo 'you need to update to 2.0, yo';
-				//
 
-				/* Get the friend users id(s) */
+				// Get the friend users id(s)
 				$options = get_option( BPAF_Core::LEGACY_OPTION );
 				$global_friend_user_ids = $options['skw_bpaf_user_ids'];
-			}
+				$friend_ids = explode( ',', $global_friend_user_ids );
 
+				// Convert to user meta
+				foreach ( $friend_ids as $friend_id ) {
+					// Add Global Friend status
+					$user = get_user_by( 'id', $friend_id );
+					if( isset( $user->data->ID ) ) {
+						// Update the user and related friendships
+						update_usermeta( $user->data->ID, BPAF_Core::METAKEY, true );
+					}
+				}
+			}
 			// Update the version information in the database
-			update_option( self::OPTION_VERSION, BPAF_Core::VERSION );
+			//update_option( self::OPTION_VERSION, BPAF_Core::VERSION );
+			add_action('admin_notices', array( $this, 'admin_notice' ) );
 		}
+	}
+
+	/**
+	 * Notify the admin of the update.
+	 *
+	 * @since 2.0.0
+	 */
+	function admin_notice() {
+		echo '<div class="updated"><p>BuddyPress Automatic Friends has been updated to version ' . BPAF_Core::VERSION . '.</p></div>';
 	}
 
 } // Class
