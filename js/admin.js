@@ -12,7 +12,6 @@ jQuery( document ).ready( function( $ ) {
 			var term = request.term;
 			// Has the request been made before?
 			if ( term in cache ) {
-				console.log(cache);
 				response( cache[ term ] );
 				return;
 			}
