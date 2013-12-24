@@ -59,7 +59,7 @@ class BPAF_Update {
 			$this->version = '1.0.0';
 			add_option( self::OPTION_VERSION, $this->version );
 
-			add_action( 'init', array( $this, 'action_init_perform_updates' ) );
+			add_action( 'admin_init', array( $this, 'action_admin_init_perform_updates' ) );
 		}
 	}
 
@@ -68,7 +68,11 @@ class BPAF_Update {
 	 *
 	 * @since 2.0.0
 	 */
-	function action_init_perform_updates() {
+	function action_admin_init_perform_updates() {
+
+		if( ! is_admin() || ! is_user_logged_in() ) {
+			return;
+		}
 
 		// Check if the version has changed and if so perform the necessary actions
 		if ( ! isset( $this->version ) || $this->version < BPAF_Core::VERSION ) {
@@ -85,9 +89,12 @@ class BPAF_Update {
 				foreach ( $friend_ids as $friend_id ) {
 					// Add Global Friend status
 					$user = get_user_by( 'id', $friend_id );
-					if( isset( $user->data->ID ) ) {
+					$user_id = $user->data->ID;
+					if( isset( $user_id ) ) {
 						// Update the user and related friendships
-						update_usermeta( $user->data->ID, BPAF_Core::METAKEY, true );
+						update_user_meta( $user_id, BPAF_Core::METAKEY, true );
+						bpaf_create_friendships( $user_id );
+						bpaf_update_friendship_counts( $user_id );
 					}
 				}
 			}
@@ -103,7 +110,7 @@ class BPAF_Update {
 	 * @since 2.0.0
 	 */
 	function admin_notice() {
-		echo '<div class="updated"><p>BuddyPress Automatic Friends has been updated to version ' . BPAF_Core::VERSION . '.</p></div>';
+		echo '<div class="updated"><p>BuddyPress Automatic Friends has been updated to version ' . BPAF_Core::VERSION . '. <a href="' . admin_url('users.php?page=s8d-bpaf-settings') . '">Click Here</a> to visit the new settings.</p></div>';
 	}
 
 } // Class

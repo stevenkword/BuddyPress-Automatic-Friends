@@ -127,6 +127,7 @@ class BPAF_Admin {
 	function render_global_friend_table() {
 
 		// Legacy Support
+
 		$options = get_option( BPAF_Core::LEGACY_OPTION );
 		if( isset( $options[ BPAF_Core::LEGACY_OPTION . '_ids'] ) ) {
 			$s8d_bpaf_user_ids = $options[ BPAF_Core::LEGACY_OPTION . '_ids'];
@@ -147,16 +148,14 @@ class BPAF_Admin {
 				</tr>
 			</thead>
 			<?php
-			$i = 1;
 			if( is_array( $friend_user_ids ) && 0 < count( $friend_user_ids ) ) {
-				foreach( $friend_user_ids as $friend_user_id ){
+				foreach( $friend_user_ids as $i => $friend_user_id ) {
 					$friend_userdata = get_userdata( $friend_user_id );
-					if( $friend_userdata ){
+					if( $friend_userdata ) {
 						// Add a row to the table
-						$this->render_global_friend_table_row( $friend_user_id, $i );
-					}//if
-					$i++;
-				}//foreach
+						$this->render_global_friend_table_row( $friend_user_id, $i + 1 );
+					}
+				}// foreach
 				unset( $i );
 			} else {
 				echo '<tr class="bpaf-empty-table-row"><td colspan="3">No Global Friends found.</td></tr>';
@@ -285,9 +284,9 @@ class BPAF_Admin {
 	 */
 	function action_ajax_bpaf_suggest_global_friend() {
 		// Nonce check
-		//if ( ! wp_verify_nonce( $_REQUEST['nonce'], BPAF_Core::NONCE ) ) {
-			//wp_die( BPAF_Core::NONCE_FAIL_MSG );
-		//}
+		if ( ! wp_verify_nonce( $_REQUEST['nonce'], BPAF_Core::NONCE ) ) {
+			wp_die( BPAF_Core::NONCE_FAIL_MSG );
+		}
 
 		global $bp;
 		$global_friend_user_ids = bpaf_get_global_friends();
@@ -350,9 +349,10 @@ class BPAF_Admin {
 	 * @since 2.0.0
 	 */
 	function render_global_friend_table_row( $friend_user_id, $i = '' ) {
+
 		if( ! isset( $i ) || '' == $i ) {
 			$i = count( bpaf_get_global_friends() );
-			echo $i;
+			//echo $i;
 		}
 		$friend_userdata = get_userdata( $friend_user_id );
 		?>

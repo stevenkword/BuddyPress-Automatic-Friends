@@ -9,7 +9,7 @@ jQuery( document ).ready( function( $ ) {
 
 	$addGlobalFriendField.autocomplete({
 		autoFocus: true,
-		minLength: 2,
+		minLength: 1,
 		source: function(request, response) {
 			var term = request.term;
 			// Has the request been made before?

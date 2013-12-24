@@ -97,8 +97,12 @@ class BPAF_Core {
 
 		/* Load the admin */
 		if ( is_admin() ){
-			require_once( dirname(__FILE__) . '/inc/admin.php' );
-			require_once( dirname(__FILE__) . '/inc/update.php' );
+			if( function_exists('bp_is_active') && bp_is_active( 'friends' ) ) {
+				require_once( dirname(__FILE__) . '/inc/admin.php' );
+				require_once( dirname(__FILE__) . '/inc/update.php' );
+			} else {
+				add_action('admin_notices', array( $this, 'admin_notice' ) );
+			}
 		}
 
 		/* Do this the first time a new user logs in */
@@ -116,8 +120,9 @@ class BPAF_Core {
 	 */
 	function first_login() {
 
-		if( ! is_user_logged_in() )
+		if( ! is_user_logged_in() ) {
 			return;
+		}
 
 		global $bp;
 
@@ -223,6 +228,15 @@ class BPAF_Core {
 
 		/* Update initiator friend counts */
 		BP_Friends_Friendship::total_friend_count( $initiator_user_id );
+	}
+
+	/**
+	 * Notify the admin of why we can't load the plugin.
+	 *
+	 * @since 2.0.0
+	 */
+	function admin_notice() {
+		echo '<div class="error"><p>BuddyPress Automatic Friends cannot be loaded because Friend Connections are not enabled. <a href="' . admin_url('options-general.php?page=bp-components') . '">Click Here</a> to enable this BuddyPress component.</p></div>';
 	}
 
 }
