@@ -153,7 +153,7 @@ class BPAF_Admin {
 					$friend_userdata = get_userdata( $friend_user_id );
 					if( $friend_userdata ) {
 						// Add a row to the table
-						$this->render_global_friend_table_row( $friend_user_id, $i + 1 );
+						$this->render_global_friend_table_row( $friend_user_id, $i + 2 ); // Because i%2 of i=0 and i=1 is the same
 					}
 				}// foreach
 				unset( $i );
