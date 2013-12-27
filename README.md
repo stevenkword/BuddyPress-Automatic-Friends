@@ -15,7 +15,8 @@ Automatically create and accept friendships for specified users upon new user re
 
 ## Screenshots ##
 
-1. Admin Settings page:
+1. Global Friends overview
+2. Autocomplete usernames
 
 
 ## Installation ##

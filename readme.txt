@@ -16,7 +16,7 @@ Automatically create and accept friendships for specified users upon new user re
 == Screenshots ==
 
 1. Global Friends overview
-2. Autocomplete usersames
+2. Autocomplete usernames
 
 
 == Changelog ==
