@@ -87,7 +87,7 @@ jQuery( document ).ready( function( $ ) {
 	// Remove a Global Friend
 	$tableContainer.on( 'click', '.trash', function(e) {
 		e.preventDefault();
-		var confirmDelete = confirm("Removing this user will delete ALL friendships related the this user. 'Cancel' to stop, 'OK' to delete.");
+		var confirmDelete = confirm("Removing this user will delete ALL friendships related to this user. 'Cancel' to stop, 'OK' to delete.");
 		if( false === confirmDelete )
 			return;
 
