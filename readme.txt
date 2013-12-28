@@ -86,7 +86,3 @@ To a WordPress Installation near you.
 == Upgrade Notice ==
 
 No notices.
-
-== Plugin Support ==
-
-[BuddyPress Automatic Friends Support](http://www.stevenword.com/plugins/bp-automatic-friends/ "BuddyPress Automatic Friends Support")
