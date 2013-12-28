@@ -1,6 +1,6 @@
 === BuddyPress Automatic Friends ===
 
-Contributors: Steven K. Word
+Contributors: stevenkword
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DWK9EXNAHLZ42
 Tags: buddypress, plugin, admin, automatic, friends, instant friends, automatic friends, registration, new members
 Requires at least: 3.5

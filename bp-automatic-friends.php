@@ -5,9 +5,8 @@ Plugin URI: http://www.stevenword.com/bp-automatic-friends/
 Description: Automatically create and accept friendships for specified users upon new user registration. * Requires BuddyPress
 Text Domain: bp-automatic-friends
 Version: 2.0.0
-Author: Steven K. Word
+Author: Steven Word
 Author URI: http://stevenword.com/
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DWK9EXNAHLZ42
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,11 +28,6 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-
-
-/******************************************************************************
- * DO NO SHIP WITHOUT MAKING A UPDATE PROCEDURE
- ******************************************************************************/
 
 /**
  * BuddPress Automatic Friends Core
