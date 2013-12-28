@@ -48,7 +48,14 @@ No notices.
 ## Changelog ##
 
 = 2.0.0 =
-* What wasn't changed?
+
+* Major OOP rewrite
+* Admin Menu compliance with modern BuddyPress versions
+* Themes options page
+* Adds donate links
+* Autocomplete on Global Friend suggestions
+* Ajax actions for adding/removing global friends
+* General beautification
 
 = 1.6.2 =
 
