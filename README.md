@@ -1,8 +1,5 @@
 BuddyPress Automatic Friends
 ============================
-
-!http://ps.w.org/bp-automatic-friends/assets/banner-772x250.png?rev=829450!
-
 * Contributors: stevenkword
 * Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DWK9EXNAHLZ42
 * Tags: buddypress, plugin, admin, automatic, friends, instant friends, automatic friends, registration, new members
