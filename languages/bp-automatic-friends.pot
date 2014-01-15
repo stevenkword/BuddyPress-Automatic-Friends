@@ -1,0 +1,121 @@
+# Copyright (C) 2014 BuddyPress Automatic Friends
+# This file is distributed under the same license as the BuddyPress Automatic Friends package.
+msgid ""
+msgstr ""
+"Project-Id-Version: BuddyPress Automatic Friends 2.0.0\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/bp-automatic-friends\n"
+"POT-Creation-Date: 2014-01-14 16:06:50+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2014-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#. #-#-#-#-#  plugin.pot (BuddyPress Automatic Friends 2.0.0)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#: inc/admin.php:118 inc/admin.php:186 inc/admin.php:248
+msgid "BuddyPress Automatic Friends"
+msgstr ""
+
+#: inc/admin.php:118
+msgid "Automatic Friends"
+msgstr ""
+
+#: inc/admin.php:145 inc/admin.php:166
+msgid "Username"
+msgstr ""
+
+#: inc/admin.php:146 inc/admin.php:167
+msgid "Name"
+msgstr ""
+
+#: inc/admin.php:147 inc/admin.php:168
+msgid "Friends"
+msgstr ""
+
+#: inc/admin.php:191
+msgid "Help Improve BP Automatic Friends"
+msgstr ""
+
+#: inc/admin.php:193
+msgid ""
+"We would really appreciate your input to help us continue to improve the "
+"product."
+msgstr ""
+
+#: inc/admin.php:195
+msgid "Find us on %1$s or donate to the project using the button below."
+msgstr ""
+
+#: inc/admin.php:208
+msgid "Contact BP Automatic Friends"
+msgstr ""
+
+#: inc/admin.php:211
+msgid "Support Forums"
+msgstr ""
+
+#: inc/admin.php:212
+msgid "BP Automatic Friends on the Web"
+msgstr ""
+
+#: inc/admin.php:213
+msgid "GitHub Project"
+msgstr ""
+
+#: inc/admin.php:214
+msgid "Review on WordPress.org"
+msgstr ""
+
+#: inc/admin.php:221
+msgid ""
+"When new user accounts are registered, friendships between the new user and "
+"each of the following global friends will be created automatically."
+msgstr ""
+
+#: inc/admin.php:222
+msgid "Global Friends"
+msgstr ""
+
+#: inc/admin.php:224
+msgid "Search by Username"
+msgstr ""
+
+#: inc/admin.php:226
+msgid "Add User"
+msgstr ""
+
+#: inc/admin.php:250
+msgid "Global Friend"
+msgstr ""
+
+#: inc/admin.php:254
+msgid "Automatically create friendships with all new users"
+msgstr ""
+
+#: inc/admin.php:366
+msgid "Edit"
+msgstr ""
+
+#: inc/admin.php:367
+msgid "Remove"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://www.stevenword.com/bp-automatic-friends/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Automatically create and accept friendships for specified users upon new "
+"user registration. * Requires BuddyPress"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Steven Word"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://stevenword.com/"
+msgstr ""

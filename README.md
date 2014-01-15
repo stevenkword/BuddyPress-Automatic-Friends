@@ -5,7 +5,7 @@ BuddyPress Automatic Friends
 * Tags: buddypress, plugin, admin, automatic, friends, instant friends, automatic friends, registration, new members
 * Requires at least: 3.5
 * Tested up to: 3.8
-* Stable tag: 2.0.0
+* Stable tag: 2.0.1
 
 Automatically create and accept friendships for specified users upon new user registration. * Requires BuddyPress
 
@@ -46,6 +46,10 @@ No notices.
 
 
 ## Changelog ##
+
+= 2.0.1 =
+
+* Now with more Spanish - Thank you Maria Ramos
 
 = 2.0.0 =
 

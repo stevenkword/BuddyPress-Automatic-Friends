@@ -115,7 +115,7 @@ class BPAF_Admin {
 		if ( ! is_super_admin() )
 			return false;
 
-		add_users_page( __( 'BuddyPress Automatic Friends', 's8d-bpaf-settings'), __( 'Automatic Friends', 's8d-bpaf-settings' ), 'manage_options', 's8d-bpaf-settings', array( $this, 'settings_page' ) );
+		add_users_page( __( 'Automatic Friends', BPAF_Core::TEXT_DOMAIN), __( 'Automatic Friends', BPAF_Core::TEXT_DOMAIN ), 'manage_options', 's8d-bpaf-settings', array( $this, 'settings_page' ) );
 	}
 
 	/**
