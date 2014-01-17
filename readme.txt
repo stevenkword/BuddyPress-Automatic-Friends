@@ -21,7 +21,7 @@ Automatically create and accept friendships for specified users upon new user re
 
 = 2.0.1 =
 
-* Now with more Spanish - Thank you Maria Ramos
+* Now with more Spanish - Thanks to Maria Ramos
 
 == Changelog ==
 

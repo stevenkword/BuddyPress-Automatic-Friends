@@ -49,7 +49,7 @@ No notices.
 
 = 2.0.1 =
 
-* Now with more Spanish - Thank you Maria Ramos
+* Now with more Spanish - Thanks to Maria Ramos
 
 = 2.0.0 =
 
