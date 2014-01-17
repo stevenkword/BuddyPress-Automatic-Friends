@@ -18,12 +18,11 @@ Automatically create and accept friendships for specified users upon new user re
 1. Global Friends overview
 2. Autocomplete usernames
 
+== Changelog ==
 
 = 2.0.1 =
 
 * Now with more Spanish - Thanks to Maria Ramos
-
-== Changelog ==
 
 = 2.0.0 =
 
