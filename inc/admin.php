@@ -293,7 +293,8 @@ class BPAF_Admin {
 
 		$users = get_users( array(
 			//'fields' => 'user_nicename' // This is returning numeric, wtf?
-			'exclude' => $global_friend_user_ids
+			'exclude' => $global_friend_user_ids,
+			'number'  => 25 // The maximum number of users to return (large dataset)
 		 ) );
 
 		$user_ids = array();
