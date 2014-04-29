@@ -20,6 +20,11 @@ Automatically create and accept friendships for specified users upon new user re
 
 == Changelog ==
 
+= 2.0.2 =
+
+* Now with more Portuguese - Thanks to Renato Alves
+* Limits number of users returned via ajax suggest to improve performance with large datasets
+
 = 2.0.1 =
 
 * Now with more Spanish - Thanks to Maria Ramos
