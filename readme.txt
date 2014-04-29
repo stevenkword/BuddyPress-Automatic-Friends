@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: buddypress, plugin, admin, automatic, friends, instant friends, automatic friends, registration, new members
 Requires at least: 3.5
 Tested up to: 3.8
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 
 Automatically create and accept friendships for specified users upon new user registration. * Requires BuddyPress
 
