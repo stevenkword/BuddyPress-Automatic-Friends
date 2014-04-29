@@ -157,8 +157,9 @@ class BPAF_Admin {
 					}
 				}// foreach
 				unset( $i );
-			} else {
-				echo '<tr class="bpaf-empty-table-row"><td colspan="3">No Global Friends found.</td></tr>';
+			} else { ?>
+				<tr class="bpaf-empty-table-row"><td colspan="3"><?php _e('No Global Friends found.', BPAF_Core::TEXT_DOMAIN ); ?></td></tr>;
+				<?php
 			}
 			?>
 			<tfoot>
