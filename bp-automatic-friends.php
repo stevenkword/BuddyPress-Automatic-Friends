@@ -34,8 +34,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 class BPAF_Core {
 
-	const VERSION        = '2.0.0';
-	const REVISION       = '20131222';
+	const VERSION        = '2.0.2';
+	const REVISION       = '20140429';
 	const METAKEY        = 'bpaf_global_friend';
 	const LEGACY_OPTION  = 'skw_bpaf_options';
 	const NONCE          = 'bpaf_nonce';
