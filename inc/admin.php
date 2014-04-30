@@ -297,11 +297,8 @@ class BPAF_Admin {
 			'exclude' => $global_friend_user_ids,
 		) );
 
-		//var_dump( $user_query );
-
 		// Get the results from the query, returning the first user
   		$users = $user_query->get_results();
-  		//var_dump( $users );
 
 		$user_ids = array();
 		foreach( $users as $user ) {
