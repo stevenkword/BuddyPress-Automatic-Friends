@@ -22,7 +22,7 @@ jQuery( document ).ready( function( $ ) {
 			params.term = request.term;
 			// Remote Source
 			$.ajax({
-				url: ajaxurl + '?action=bpaf_suggest_global_friend',
+				url: ajaxurl + '?action=bpaf_suggest_global_friend&search=' + params.term,
 				dataType: "json",
 					data: jQuery.param(params),
 					success: function(data){

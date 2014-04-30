@@ -20,6 +20,10 @@ Automatically create and accept friendships for specified users upon new user re
 
 == Changelog ==
 
+= 2.0.3 =
+
+* Hot fix for autocomplete search results
+
 = 2.0.2 =
 
 * Now with more Portuguese - Thanks to Renato Alves
