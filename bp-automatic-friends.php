@@ -163,6 +163,10 @@ class BPAF_Core {
 
 		global $bp;
 
+		// Disable email notifications.  In situations with hundreds of users, this can get SPAMMY fast
+		remove_action( 'friends_friendship_requested', 'friends_notification_new_request', 10 );
+		remove_action( 'friends_friendship_accepted', 'friends_notification_accepted_request', 10 );
+
 		/* Get the user data for the initiatorly registered user. */
 		$initiator_user_info = get_userdata( $initiator_user_id );
 
