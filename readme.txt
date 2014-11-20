@@ -20,6 +20,10 @@ Automatically create and accept friendships for specified users upon new user re
 
 == Changelog ==
 
+= 2.0.5 =
+
+* Disables email notifications.  In situations with hundreds of users, this can get SPAMMY fast
+
 = 2.0.4 =
 
 * Adds icon assets for plugin directory
