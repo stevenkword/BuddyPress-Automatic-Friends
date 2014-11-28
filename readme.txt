@@ -89,7 +89,7 @@ Automatically create and accept friendships for specified users upon new user re
 
 2. Activate the plugin
 
-3. Click on the "Automatic Friends" link under the BuddyPress Menu.
+3. Click on the "Automatic Friends" link under the Users Menu.
 
 4. Configure your BuddyPress Automatic Friends options.
 
