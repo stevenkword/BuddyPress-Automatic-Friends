@@ -21,7 +21,7 @@ class BPAF_Admin {
 	/* Define and register singleton */
 	private static $instance = false;
 	public static function instance() {
-		if( ! self::$instance ) {
+		if ( ! self::$instance ) {
 			self::$instance = new self;
 			self::$instance->setup();
 		}
@@ -68,7 +68,7 @@ class BPAF_Admin {
 		add_action( 'edit_user_profile_update', array( $this, 'action_personal_options_update' ) );
 
 		/* We don't need any of these things in other places */
-		if( 'users.php' != $pagenow || ! isset( $_REQUEST['page'] ) || 's8d-bpaf-settings' != $_REQUEST['page'] ) {
+		if ( 'users.php' != $pagenow || ! isset( $_REQUEST['page'] ) || 's8d-bpaf-settings' != $_REQUEST['page'] ) {
 			return;
 		}
 
@@ -129,9 +129,9 @@ class BPAF_Admin {
 		// Legacy Support
 
 		$options = get_option( BPAF_Core::LEGACY_OPTION );
-		if( isset( $options[ BPAF_Core::LEGACY_OPTION . '_ids'] ) ) {
+		if ( isset( $options[ BPAF_Core::LEGACY_OPTION . '_ids'] ) ) {
 			$s8d_bpaf_user_ids = $options[ BPAF_Core::LEGACY_OPTION . '_ids'];
-			$friend_user_ids = explode(',', $s8d_bpaf_user_ids);
+			$friend_user_ids = explode( ',', $s8d_bpaf_user_ids );
 		}
 
 		// Modern
@@ -148,17 +148,17 @@ class BPAF_Admin {
 				</tr>
 			</thead>
 			<?php
-			if( is_array( $friend_user_ids ) && 0 < count( $friend_user_ids ) ) {
-				foreach( $friend_user_ids as $i => $friend_user_id ) {
+			if ( is_array( $friend_user_ids ) && 0 < count( $friend_user_ids ) ) {
+				foreach ( $friend_user_ids as $i => $friend_user_id ) {
 					$friend_userdata = get_userdata( $friend_user_id );
-					if( $friend_userdata ) {
+					if ( $friend_userdata ) {
 						// Add a row to the table
 						$this->render_global_friend_table_row( $friend_user_id, $i + 2 ); // Because i%2 of i=0 and i=1 is the same
 					}
 				}// foreach
 				unset( $i );
 			} else { ?>
-				<tr class="bpaf-empty-table-row"><td colspan="3"><?php _e('No Global Friends found.', BPAF_Core::TEXT_DOMAIN ); ?></td></tr>;
+				<tr class="bpaf-empty-table-row"><td colspan="3"><?php _e( 'No Global Friends found.', BPAF_Core::TEXT_DOMAIN ); ?></td></tr>;
 				<?php
 			}
 			?>
@@ -272,7 +272,7 @@ class BPAF_Admin {
 		}
 
 		$meta_value = isset( $_REQUEST['global-friend'] ) ? true : false;
-		update_usermeta( $user_id, BPAF_Core::METAKEY, $meta_value );
+		update_user_meta( $user_id, BPAF_Core::METAKEY, $meta_value );
 
 		// Update the friend counts
 		BP_Friends_Friendship::total_friend_count( $user_id );
@@ -301,7 +301,7 @@ class BPAF_Admin {
   		$users = $user_query->get_results();
 
 		$user_ids = array();
-		foreach( $users as $user ) {
+		foreach ( $users as $user ) {
 			$user_ids[] = array(
 				'ID'           => $user->data->ID,
 				'label'        => $user->data->user_login,
@@ -309,7 +309,7 @@ class BPAF_Admin {
 			);
 		}
 
-		header('Content-Type: application/x-json');
+		header( 'Content-Type: application/x-json' );
 		echo $json = json_encode( $user_ids );
 		die;
 	}
@@ -325,15 +325,15 @@ class BPAF_Admin {
 			wp_die( BPAF_Core::NONCE_FAIL_MSG );
 		}
 
-		if( ! isset( $_REQUEST['username'] ) && empty( $_REQUEST['username'] ) ) {
+		if ( ! isset( $_REQUEST['username'] ) && empty( $_REQUEST['username'] ) ) {
 		 	die;
 		}
 
 		// Add Global Friend status
 		$user = get_user_by( 'login', $_REQUEST['username'] );
-		if( isset( $user->data->ID ) ) {
+		if ( isset( $user->data->ID ) ) {
 			// Update the user and related friendships
-			update_usermeta( $user->data->ID, BPAF_Core::METAKEY, true );
+			update_user_meta( $user->data->ID, BPAF_Core::METAKEY, true );
 
 			// This is wrong MMMMMKay! This is looking for a newly registred user, not a global friend
 			bpaf_create_friendships( $user->data->ID );
@@ -361,24 +361,24 @@ class BPAF_Admin {
 		$friend_userdata = get_userdata( $friend_user_id );
 		?>
 		<tr <?php if( 0 == $i % 2 ) echo 'class="alternate"'; ?>>
-		  <td class="username column-username">
-		  	<input class="bpaf-user-id" id="bpaf-user-<?php echo $friend_user_id;?>" type="hidden" value="<?php echo $friend_user_id; ?>"></input>
-			<?php echo get_avatar( $friend_user_id, 32 ); ?>
-			<strong><?php echo $friend_userdata->user_login;?></strong>
-			<br>
-			<div class="row-actions">
-				<span class="edit"><a href="<?php echo get_edit_user_link( $friend_user_id ); ?>" title="Edit this item"><?php _e( 'Edit', BPAF_Core::TEXT_DOMAIN );?></a> | </span>
-				<span id="remove-<?php echo $friend_userdata->user_login;?>" class="trash"><a class="submitdelete" title="Move this item to the Trash" href="javascript:void(0);"><?php _e( 'Remove', BPAF_Core::TEXT_DOMAIN );?></a></span>
-			</div>
-		  </td>
+			<td class="username column-username">
+				<input class="bpaf-user-id" id="bpaf-user-<?php echo $friend_user_id;?>" type="hidden" value="<?php echo $friend_user_id; ?>"></input>
+				<?php echo get_avatar( $friend_user_id, 32 ); ?>
+				<strong><?php echo $friend_userdata->user_login;?></strong>
+				<br>
+				<div class="row-actions">
+					<span class="edit"><a href="<?php echo get_edit_user_link( $friend_user_id ); ?>" title="Edit this item"><?php _e( 'Edit', BPAF_Core::TEXT_DOMAIN );?></a> | </span>
+					<span id="remove-<?php echo $friend_userdata->user_login;?>" class="trash"><a class="submitdelete" title="Move this item to the Trash" href="javascript:void(0);"><?php _e( 'Remove', BPAF_Core::TEXT_DOMAIN );?></a></span>
+				</div>
+			</td>
 
-		  <td class="name column-name">
-			<?php echo $friend_userdata->display_name;?>
-		  </td>
+			<td class="name column-name">
+				<?php echo $friend_userdata->display_name; ?>
+			</td>
 
-		  <td class="friends column-friends">
-			  <?php echo BP_Friends_Friendship::total_friend_count( $friend_user_id );?>
-		  </td>
+			<td class="friends column-friends">
+				<?php echo BP_Friends_Friendship::total_friend_count( $friend_user_id );?>
+			</td>
 		</tr>
 		<?php
 	}
@@ -394,12 +394,12 @@ class BPAF_Admin {
 			wp_die( BPAF_Core::NONCE_FAIL_MSG );
 		}
 
-		if( ! isset( $_REQUEST['ID'] ) && empty( $_REQUEST['ID'] ) ) {
+		if ( ! isset( $_REQUEST['ID'] ) && empty( $_REQUEST['ID'] ) ) {
 		 	die;
 		}
 
 		// Remove Global Friend status
-		update_usermeta( $_REQUEST['ID'], BPAF_Core::METAKEY, false );
+		update_user_meta( $_REQUEST['ID'], BPAF_Core::METAKEY, false );
 		bpaf_destroy_friendships( $_REQUEST['ID'] );
 
 		// Return the number of friends remaning

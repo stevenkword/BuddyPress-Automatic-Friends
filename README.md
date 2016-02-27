@@ -4,8 +4,8 @@ BuddyPress Automatic Friends
 * Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DWK9EXNAHLZ42
 * Tags: buddypress, plugin, admin, automatic, friends, instant friends, automatic friends, registration, new members
 * Requires at least: 3.5
-* Tested up to: 4.2
-* Stable tag: 2.0.5
+* Tested up to: 4.5
+* Stable tag: 2.0.7
 
 Automatically create and accept friendships for specified users upon new user registration. * Requires BuddyPress
 
@@ -46,6 +46,15 @@ No notices.
 
 
 ## Changelog ##
+
+= 2.0.7 =
+
+* Resolves PHP strict error when calling `get_global_friends()`
+* Bumps version compatibilty for WordPress 4.5
+
+= 2.0.6 =
+
+* Bumps version compatibilty for WordPress 4.4.2
 
 = 2.0.5 =
 

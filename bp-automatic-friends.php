@@ -4,7 +4,7 @@ Plugin Name: BuddyPress Automatic Friends
 Plugin URI: http://www.stevenword.com/bp-automatic-friends/
 Description: Automatically create and accept friendships for specified users upon new user registration. * Requires BuddyPress
 Text Domain: bp-automatic-friends
-Version: 2.0.5
+Version: 2.0.7
 Author: Steven Word
 Author URI: http://stevenword.com/
 License: GPLv2 or later
@@ -34,7 +34,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 class BPAF_Core {
 
-	const VERSION        = '2.0.5';
+	const VERSION        = '2.0.7';
 	const REVISION       = '20141120';
 	const METAKEY        = 'bpaf_global_friend';
 	const LEGACY_OPTION  = 'skw_bpaf_options';
@@ -133,7 +133,7 @@ class BPAF_Core {
 	 *
 	 * @return array|bool
 	 */
-	function get_global_friends() {
+	public static function get_global_friends() {
 		global $bp;
 
 		// The Query
@@ -159,7 +159,7 @@ class BPAF_Core {
 	 * @uses get_userdata, get_option, explode, friends_add_friend, get_friend_user_ids, total_friend_count
 	 * @return null
 	 */
-	function create_friendships( $initiator_user_id ) {
+	public static function create_friendships( $initiator_user_id ) {
 
 		global $bp;
 
@@ -205,7 +205,7 @@ class BPAF_Core {
 	 * @uses get_userdata, get_option, explode, friends_add_friend, get_friend_user_ids, total_friend_count
 	 * @return null
 	 */
-	function destroy_friendships( $initiator_user_id ) {
+	public static function destroy_friendships( $initiator_user_id ) {
 		BP_Friends_Friendship::delete_all_for_user( $initiator_user_id );
 		self::update_friendship_counts( $initiator_user_id );
 	}
@@ -215,7 +215,7 @@ class BPAF_Core {
 	 *
 	 * @return null
 	 */
-	function update_friendship_counts( $initiator_user_id ) {
+	public static function update_friendship_counts( $initiator_user_id ) {
 		/* Get friends of $user_id */
 		$friend_ids = BP_Friends_Friendship::get_friend_user_ids( $initiator_user_id );
 
